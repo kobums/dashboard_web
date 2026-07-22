@@ -13,6 +13,13 @@ export const THEME_LABELS: Record<ThemeMode, string> = {
   dark: '다크',
 }
 
+// 아이콘 심볼 (텍스트 스타일 강제 — 이모지 렌더 방지)
+export const THEME_ICONS: Record<ThemeMode, string> = {
+  system: '◐',
+  light: '☀︎', // ☀︎
+  dark: '☾', // ☾
+}
+
 export function getTheme(): ThemeMode {
   const saved = localStorage.getItem(KEY)
   return saved === 'light' || saved === 'dark' ? saved : 'system'

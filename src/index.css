@@ -183,18 +183,23 @@ img {
   margin-left: auto; /* 줄바꿈 시에도 오른쪽 정렬 유지 */
 }
 
-/* 테마 토글 — 자동/라이트/다크 순환 */
+/* 테마 토글 — ◐/☀︎/☾ 순환 아이콘 (DESIGN button-icon-circular 문법) */
 .theme-toggle {
-  padding: 7px 12px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   border: 1px solid var(--hairline);
   border-radius: var(--r-pill);
   background: var(--canvas);
   color: var(--ink-48);
-  font-size: 13px;
-  letter-spacing: -0.224px;
+  font-size: 15px;
+  line-height: 1;
   cursor: pointer;
   transition: transform 0.1s, color 0.2s;
-  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .theme-toggle:hover {
@@ -225,16 +230,26 @@ img {
   transition: color 0.2s, background-color 0.2s;
 }
 
-/* 좁은 화면: 한 줄에 들어가도록 살짝 축소 */
+/* 좁은 화면: 한 줄에 들어가도록 축소 */
 @media (max-width: 520px) {
+  .shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .nav-link {
-    padding: 6px 10px;
+    padding: 6px 8px;
     font-size: 13px;
   }
 
+  .brand {
+    font-size: 19px;
+  }
+
   .theme-toggle {
-    padding: 6px 10px;
-    font-size: 12px;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
 
