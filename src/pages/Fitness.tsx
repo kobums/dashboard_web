@@ -120,15 +120,15 @@ export default function Fitness() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={weightData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                 <CartesianGrid vertical={false} stroke="var(--track)" />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: '#7a7a7a', fontSize: 12 }} />
+                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-48)', fontSize: 12 }} />
                 <YAxis
                   domain={['auto', 'auto']}
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#7a7a7a', fontSize: 12 }}
+                  tick={{ fill: 'var(--ink-48)', fontSize: 12 }}
                 />
                 <Tooltip
-                  contentStyle={{ borderRadius: 11, border: '1px solid #e0e0e0', fontFamily: 'inherit', fontSize: 13 }}
+                  contentStyle={{ borderRadius: 11, border: '1px solid var(--tooltip-border)', background: 'var(--tooltip-bg)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13 }}
                   formatter={(value) => [`${value ?? 0}kg`, '체중']}
                 />
                 <Line type="monotone" dataKey="kg" stroke="var(--accent)" strokeWidth={2} dot={{ r: 3 }} />

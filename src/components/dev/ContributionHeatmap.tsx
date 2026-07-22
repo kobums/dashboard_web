@@ -10,7 +10,7 @@ const GAP = 3
 const RADIUS = 2
 
 // sequential ramp: 밝기 단조 감소 (0 = 빈 셀)
-const LEVELS = ['#ebedf0', '#cfe0f5', '#93bce9', '#4a90d9', '#0066cc']
+const LEVELS = ['var(--heat-0)', 'var(--heat-1)', 'var(--heat-2)', 'var(--heat-3)', 'var(--heat-4)']
 
 function level(total: number): number {
   if (total <= 0) return 0
@@ -69,7 +69,7 @@ export default function ContributionHeatmap({ calendar }: { calendar: CalendarDa
                 x={0}
                 y={topPad + row * (CELL + GAP) + CELL - 1}
                 fontSize={11}
-                fill="#7a7a7a"
+                fill="var(--ink-48)"
               >
                 {label}
               </text>
@@ -85,7 +85,7 @@ export default function ContributionHeatmap({ calendar }: { calendar: CalendarDa
                 x={m.col * (CELL + GAP)}
                 y={12}
                 fontSize={11}
-                fill="#7a7a7a"
+                fill="var(--ink-48)"
               >
                 {m.label}
               </text>
