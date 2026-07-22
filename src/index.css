@@ -1004,6 +1004,11 @@ a.card:active {
     column-gap: 32px;
   }
 
+  /* grid 아이템은 min-width:auto 기본 — 긴 제목이 셀을 밀어 카드를 뚫는 것 방지 */
+  .activity-list.two-col-list > .activity-item {
+    min-width: 0;
+  }
+
   /* 그리드 셀 안에서 카드 여러 장을 세로로 쌓는 래퍼 (독서 우측 열 등) */
   .desktop-grid > .side-stack {
     display: flex;
