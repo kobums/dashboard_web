@@ -32,6 +32,19 @@
   --track: #e8e8ed; /* 링/바의 빈 트랙 (데이터 아님) */
   --danger: #d70015;
 
+  /* 히트맵 sequential ramp (0 = 빈 셀) */
+  --heat-0: #ebedf0;
+  --heat-1: #cfe0f5;
+  --heat-2: #93bce9;
+  --heat-3: #4a90d9;
+  --heat-4: #0066cc;
+
+  /* 차트 툴팁·호버 (recharts inline style 에서 참조) */
+  --tooltip-bg: #ffffff;
+  --tooltip-border: #e0e0e0;
+  --cursor-fill: rgba(0, 0, 0, 0.04);
+  --card-hover-border: #d0d0d4;
+
   /* radius */
   --r-sm: 8px;
   --r-md: 11px;
@@ -40,6 +53,66 @@
 
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "SF Pro Display", "Apple SD Gothic Neo", Pretendard, "Helvetica Neue", Arial, sans-serif;
+
+  color-scheme: light;
+}
+
+/* ---- 다크 테마 (DESIGN.md 의 다크 토큰 기반: surface-tile/surface-black/body-muted/Sky Blue) ----
+   시스템 모드(data-theme 없음)는 prefers-color-scheme 을 따르고,
+   명시 선택은 data-theme 이 미디어쿼리보다 우선한다. 변수 세트는 두 곳에 동일하게 둔다. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --accent: #0071e3;
+    --accent-focus: #2997ff;
+    --ink: #f5f5f7;
+    --ink-80: #cccccc;
+    --ink-48: #98989d;
+    --ink-tertiary: #636366;
+    --canvas: #1d1d1f;
+    --parchment: #000000;
+    --pearl: #272729;
+    --hairline: #3a3a3c;
+    --divider-soft: #2a2a2c;
+    --track: #3a3a3c;
+    --danger: #ff453a;
+    --heat-0: #26262a;
+    --heat-1: #113a5c;
+    --heat-2: #17629e;
+    --heat-3: #2287dd;
+    --heat-4: #64b5ff;
+    --tooltip-bg: #272729;
+    --tooltip-border: #3a3a3c;
+    --cursor-fill: rgba(255, 255, 255, 0.06);
+    --card-hover-border: #48484c;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --accent: #0071e3;
+  --accent-focus: #2997ff;
+  --ink: #f5f5f7;
+  --ink-80: #cccccc;
+  --ink-48: #98989d;
+  --ink-tertiary: #636366;
+  --canvas: #1d1d1f;
+  --parchment: #000000;
+  --pearl: #272729;
+  --hairline: #3a3a3c;
+  --divider-soft: #2a2a2c;
+  --track: #3a3a3c;
+  --danger: #ff453a;
+  --heat-0: #26262a;
+  --heat-1: #113a5c;
+  --heat-2: #17629e;
+  --heat-3: #2287dd;
+  --heat-4: #64b5ff;
+  --tooltip-bg: #272729;
+  --tooltip-border: #3a3a3c;
+  --cursor-fill: rgba(255, 255, 255, 0.06);
+  --card-hover-border: #48484c;
+  color-scheme: dark;
 }
 
 * {
@@ -99,6 +172,34 @@ img {
   font-size: 21px;
   font-weight: 600;
   letter-spacing: -0.231px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 테마 토글 — 자동/라이트/다크 순환 */
+.theme-toggle {
+  padding: 7px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--ink-48);
+  font-size: 13px;
+  letter-spacing: -0.224px;
+  cursor: pointer;
+  transition: transform 0.1s, color 0.2s;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 /* 탭 네비 — 세그먼트, 활성은 Action Blue */
@@ -167,7 +268,7 @@ a.card {
 
 a.card:hover {
   background: var(--pearl);
-  border-color: #d0d0d4;
+  border-color: var(--card-hover-border);
 }
 
 a.card:active {
