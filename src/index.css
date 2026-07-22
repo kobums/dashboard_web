@@ -1,0 +1,896 @@
+/* ============================================================
+   Apple 디자인 시스템 (DESIGN.md 기반)
+   - 단일 Action Blue 인터랙티브 액센트 (#0066cc)
+   - 도메인 색은 데이터 인코딩(활동 링·차트·진행 바) 전용
+   - 그림자는 없음 (DESIGN: 카드/버튼/텍스트에 그림자 금지)
+   - SF Pro 시스템 스택, body 17px, 웨이트 사다리 300/400/600/700
+   ============================================================ */
+
+:root {
+  /* 인터랙티브 (단일 액센트) */
+  --accent: #0066cc; /* Action Blue — 모든 링크·버튼·활성 탭·포커스 */
+  --accent-focus: #0071e3;
+  --accent-on-dark: #2997ff;
+
+  /* 텍스트 */
+  --ink: #1d1d1f; /* 헤드라인·본문 */
+  --ink-80: #333333;
+  --ink-48: #7a7a7a; /* 보조 텍스트·비활성 */
+  --ink-tertiary: #aeaeb2;
+
+  /* 서페이스 */
+  --canvas: #ffffff;
+  --parchment: #f5f5f7; /* 시그니처 오프화이트 — 페이지 배경 */
+  --pearl: #fafafc;
+
+  /* 라인 */
+  --hairline: #e0e0e0;
+  --divider-soft: #f0f0f0;
+
+  /* 데이터 인코딩 — DESIGN 순수 준수: 단일 Action Blue.
+     활동 링·차트·진행 바 모두 --accent 사용 (각 차트가 단일 시리즈라 색 구분 불필요) */
+  --track: #e8e8ed; /* 링/바의 빈 트랙 (데이터 아님) */
+  --danger: #d70015;
+
+  /* radius */
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-lg: 18px;
+  --r-pill: 9999px;
+
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Apple SD Gothic Neo", Pretendard, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px; /* DESIGN: 본문 17px */
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ---- 레이아웃 ---- */
+
+.shell {
+  max-width: 720px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 0 24px;
+}
+
+.brand {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.231px;
+}
+
+/* 탭 네비 — 세그먼트, 활성은 Action Blue */
+.nav {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+}
+
+.nav-link {
+  padding: 6px 15px;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-link.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---- 타이포 ---- */
+
+.display-title {
+  font-size: 34px; /* DESIGN display-md */
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.374px;
+  padding-bottom: 8px;
+}
+
+.text-secondary {
+  color: var(--ink-48);
+}
+
+.text-tertiary {
+  color: var(--ink-tertiary);
+}
+
+/* ---- 카드 ---- */
+/* DESIGN: store-utility-card — hairline 1px, radius 18px, 그림자 없음 */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  display: block;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 24px;
+}
+
+/* 링크 카드 — hover 시 그림자 대신 배경/보더 미세 변화, 프레스는 scale */
+a.card {
+  transition: border-color 0.2s, background-color 0.2s, transform 0.1s;
+}
+
+a.card:hover {
+  background: var(--pearl);
+  border-color: #d0d0d4;
+}
+
+a.card:active {
+  transform: scale(0.99);
+}
+
+/* DESIGN: 카테고리 라벨은 중립 ink (인터랙티브 아님) */
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+  color: var(--ink);
+}
+
+.card-body {
+  margin-top: 16px;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.card-title {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.231px;
+}
+
+/* ---- 통계 ---- */
+
+.stat-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.374px;
+}
+
+.stat-value small {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-tertiary);
+}
+
+.stat-label {
+  margin-top: 2px;
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+}
+
+.stat-value.large {
+  font-size: 28px;
+}
+
+/* ---- 활동 링 ---- */
+
+.ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ring svg {
+  transform: rotate(-90deg);
+}
+
+.ring-progress {
+  transition: stroke-dashoffset 0.7s ease-out;
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-value {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.374px;
+  line-height: 1.1;
+}
+
+.ring-value.large {
+  font-size: 30px;
+}
+
+.ring-sub {
+  font-size: 11px;
+  color: var(--ink-48);
+}
+
+/* ---- 리스트 ---- */
+
+.book-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.book-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* DESIGN: 제품 이미지에만 유일한 그림자 — 책 표지가 그 역할 */
+.book-cover {
+  width: 44px;
+  height: 64px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  background: var(--parchment);
+  flex-shrink: 0;
+  box-shadow: rgba(0, 0, 0, 0.22) 1px 2px 12px 0;
+}
+
+.book-cover.placeholder {
+  box-shadow: none;
+  border: 1px solid var(--hairline);
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-title,
+.book-author {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.374px;
+}
+
+.book-author {
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+}
+
+.book-percent {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.progress-track {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--track);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  transition: width 0.5s;
+}
+
+.kv-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 15px;
+  letter-spacing: -0.224px;
+}
+
+.kv-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.kv-list .kv-key {
+  flex-shrink: 0;
+}
+
+.kv-list .kv-value {
+  color: var(--ink-48);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- 2열 그리드 ---- */
+
+.two-col {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---- 차트 ---- */
+
+.chart-box {
+  margin-top: 16px;
+  height: 208px;
+}
+
+/* ---- 운동 폼 ---- */
+
+.workout-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 13px;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+}
+
+.form-input {
+  padding: 11px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--canvas);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  appearance: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.form-message {
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+/* DESIGN: button-primary — Action Blue pill, scale(0.95) 프레스 */
+.form-submit {
+  padding: 11px 22px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.form-submit:active {
+  transform: scale(0.95);
+}
+
+.form-submit:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.form-submit:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+/* ---- 운동 목록 ---- */
+
+.workout-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workout-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.workout-type {
+  flex-shrink: 0;
+  min-width: 52px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: var(--parchment);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+  text-align: center;
+}
+
+.workout-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.workout-meta {
+  font-size: 15px;
+  letter-spacing: -0.224px;
+}
+
+.workout-memo {
+  font-size: 13px;
+  color: var(--ink-48);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workout-delete {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.workout-delete:active {
+  transform: scale(0.95);
+}
+
+/* ---- 운동: 같은 요일 비교 ---- */
+
+.compare-scroll {
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+.compare-table {
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+  font-size: 15px;
+  letter-spacing: -0.224px;
+}
+
+.compare-table th {
+  padding: 0 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-48);
+  text-align: right;
+}
+
+.compare-table th:first-child {
+  text-align: left;
+}
+
+.compare-table td {
+  padding: 10px 8px;
+  text-align: right;
+  border-top: 1px solid var(--divider-soft);
+  white-space: nowrap;
+}
+
+.compare-row-label {
+  text-align: left !important;
+  color: var(--ink-48);
+  font-size: 14px;
+}
+
+.compare-value {
+  font-weight: 600;
+}
+
+.compare-delta {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.compare-note {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-tertiary);
+}
+
+/* ---- 운동: 연도별 통계 ---- */
+
+.year-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.year-chip {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--ink-48);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.year-chip:active {
+  transform: scale(0.95);
+}
+
+.year-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.year-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* ---- 개발: 히트맵 ---- */
+
+.card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.heatmap-wrap {
+  margin-top: 16px;
+}
+
+.heatmap-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.heatmap-body > svg {
+  flex-shrink: 0; /* 요일 라벨 고정 열 */
+}
+
+.heatmap-scroll {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.heatmap-legend-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* ---- 개발: 최근 활동 ---- */
+
+.activity-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.activity-badge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+}
+
+/* 소스 배지 — 중립. GitHub 은 채움(ink), GitLab 은 아웃라인으로 구분 */
+.activity-badge.src-github {
+  background: var(--ink);
+  color: #fff;
+}
+
+.activity-badge.src-gitlab {
+  background: var(--parchment);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+}
+
+.activity-body {
+  flex: 1;
+  min-width: 0;
+  display: block;
+}
+
+.activity-title {
+  font-size: 15px;
+  letter-spacing: -0.224px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-body:hover .activity-title {
+  color: var(--accent);
+}
+
+.activity-meta {
+  font-size: 13px;
+  color: var(--ink-48);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- 로그인 ---- */
+
+.login-wrap {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 384px;
+}
+
+.login-form .display-title {
+  font-size: 40px; /* DESIGN display-lg */
+  padding-bottom: 0;
+}
+
+.login-desc {
+  margin-top: 8px;
+  color: var(--ink-48);
+}
+
+.login-input {
+  margin-top: 24px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--canvas);
+  color: var(--ink);
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: var(--accent);
+}
+
+.login-error {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.login-button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+.login-button:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.login-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+/* ---- 데스크톱 레이아웃 (≥1024px: 12컬럼 그리드) ---- */
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .shell {
+    max-width: 1280px;
+  }
+
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+
+  .desktop-grid > * {
+    grid-column: span 12;
+    min-width: 0;
+  }
+
+  .desktop-grid > .dg-3 {
+    grid-column: span 3;
+  }
+
+  .desktop-grid > .dg-4 {
+    grid-column: span 4;
+  }
+
+  .desktop-grid > .dg-6 {
+    grid-column: span 6;
+  }
+
+  .desktop-grid > .dg-8 {
+    grid-column: span 8;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+
+  /* 최근 활동 — 데스크톱에서 2열로 밀도 up */
+  .activity-list.two-col-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+  }
+
+  /* 그리드 셀 안에서 카드 여러 장을 세로로 쌓는 래퍼 (독서 우측 열 등) */
+  .desktop-grid > .side-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* ---- 접근성 ---- */
+
+:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
