@@ -4,6 +4,7 @@ import { api } from '../lib/api'
 import type { DevActivity, DevSummary, HealthMetric, ReadingSummary, Workout } from '../types'
 import { buildWeeklyMinutes, fmtDate, thisWeekStart } from '../lib/fitness'
 import ActivityRing from '../components/common/ActivityRing'
+import NotifyBanner from '../components/common/NotifyBanner'
 import ContributionHeatmap from '../components/dev/ContributionHeatmap'
 import BookProgressList from '../components/reading/BookProgressList'
 import WeeklyChart from '../components/fitness/WeeklyChart'
@@ -108,6 +109,8 @@ export default function Overview() {
         <br />
         오늘의 현황
       </h1>
+
+      <NotifyBanner />
 
       <Card to="/reading" eyebrow="독서" className="dg-4">
         {readingError ? (
