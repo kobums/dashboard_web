@@ -33,13 +33,13 @@ src/
 │   ├── api.ts            axios 인스턴스 (Bearer, 401 → /login)
 │   └── fitness.ts        주별 집계 유틸 (Fitness·홈 공용)
 ├── pages/
-│   ├── Overview.tsx      홈 — 3 요약 카드 + (데스크톱) 히트맵·책·운동차트·최근활동
+│   ├── Overview.tsx      홈 — 알림 배너 + 3 요약 카드 + (데스크톱) 히트맵·책·운동차트·최근활동
 │   ├── Reading.tsx       목표 링 / 월별 완독 / 읽는 책 / 카테고리·인사이트
 │   ├── Fitness.tsx       주간 링 / 같은 요일 비교 / 기록 폼 / 차트 / 연도별 / 최근
 │   ├── Dev.tsx           전체 히트맵 / 소스 카드 / 연도별 / 최근 활동
 │   └── Login.tsx         액세스 키 입력
 └── components/
-    ├── common/           ActivityRing(시그니처), AppShell(탭 네비)
+    ├── common/           ActivityRing(시그니처), AppShell(탭 네비+테마 토글), NotifyBanner(알림 배너)
     ├── reading/          BookProgressList
     ├── fitness/          WorkoutForm, WeeklyChart, CompareCard, YearlyStatsCard
     └── dev/              ContributionHeatmap(커스텀 SVG, 1월=연도 라벨),
