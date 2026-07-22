@@ -843,10 +843,11 @@ a.card:active {
   letter-spacing: -0.224px;
 }
 
-/* 소스 배지 — 중립. GitHub 은 채움(ink), GitLab 은 아웃라인으로 구분 */
+/* 소스 배지 — 중립. GitHub 은 채움(ink), GitLab 은 아웃라인으로 구분.
+   글자색은 canvas — 다크에서 ink 가 밝아져도 대비 유지 */
 .activity-badge.src-github {
   background: var(--ink);
-  color: #fff;
+  color: var(--canvas);
 }
 
 .activity-badge.src-gitlab {
