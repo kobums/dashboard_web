@@ -49,6 +49,8 @@ export default function Reading() {
   const goal = summary.goals?.year === year ? summary.goals : null
   const yearly = summary.yearlyStats?.find((y) => y.year === year)
   const completed = goal?.completedBooks ?? yearly?.completedCount ?? 0
+  // progress 에는 waiting/completed 도 섞여 오므로 실제 읽는 중만 추린다
+  const readingBooks = summary.progress?.filter((b) => b.status === 'reading') ?? []
 
   return (
     <div className="stack desktop-grid">
@@ -152,10 +154,10 @@ export default function Reading() {
       </div>
 
       {/* 읽고 있는 책 */}
-      {summary.progress && summary.progress.length > 0 && (
+      {readingBooks.length > 0 && (
         <section className="card">
           <h2 className="card-title">읽고 있는 책</h2>
-          <BookProgressList books={summary.progress} />
+          <BookProgressList books={readingBooks} />
         </section>
       )}
     </div>

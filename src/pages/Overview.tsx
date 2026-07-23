@@ -88,7 +88,9 @@ export default function Overview() {
     reading?.yearlyStats?.find((y) => y.year === today.getFullYear())?.completedCount ??
     0
   const goalProgress = goal && goal.targetBooks > 0 ? completedThisYear / goal.targetBooks : 0
-  const readingCount = reading?.progress?.filter((b) => b.status === 'reading').length ?? 0
+  // progress 에는 waiting/completed 도 섞여 오므로 실제 읽는 중만 추린다
+  const readingBooks = reading?.progress?.filter((b) => b.status === 'reading') ?? []
+  const readingCount = readingBooks.length
 
   const workoutList = workouts ?? []
   const metricList = metrics ?? []
@@ -203,10 +205,10 @@ export default function Overview() {
           <h2 className="card-title">읽고 있는 책</h2>
           <SkLines rows={5} />
         </section>
-      ) : reading?.progress && reading.progress.length > 0 ? (
+      ) : readingBooks.length > 0 ? (
         <section className="card desktop-only dg-4">
           <h2 className="card-title">읽고 있는 책</h2>
-          <BookProgressList books={reading.progress} />
+          <BookProgressList books={readingBooks} />
         </section>
       ) : null}
 
