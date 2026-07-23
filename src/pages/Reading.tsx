@@ -114,6 +114,14 @@ export default function Reading() {
         </section>
       )}
 
+      {/* 읽고 있는 책 */}
+      {readingBooks.length > 0 && (
+        <section className="card">
+          <h2 className="card-title">읽고 있는 책</h2>
+          <BookProgressList books={readingBooks} />
+        </section>
+      )}
+
       {/* 연도별 통계 (완독 책 그리드 포함) */}
       <ReadingYearlyCard initialSummary={summary} className="dg-8" />
 
@@ -153,13 +161,6 @@ export default function Reading() {
         )}
       </div>
 
-      {/* 읽고 있는 책 */}
-      {readingBooks.length > 0 && (
-        <section className="card">
-          <h2 className="card-title">읽고 있는 책</h2>
-          <BookProgressList books={readingBooks} />
-        </section>
-      )}
     </div>
   )
 }
