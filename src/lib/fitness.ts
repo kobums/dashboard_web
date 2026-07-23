@@ -29,6 +29,21 @@ export function buildWeeklyMinutes(workouts: Workout[], weekStart: Date) {
   return weeks
 }
 
+// 최근 N일 일별 운동 시간(분) — 운동 페이지 일별 차트용.
+export function buildDailyMinutes(workouts: Workout[], days = 14) {
+  const today = new Date()
+  const out: { name: string; 분: number }[] = []
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today.getTime() - i * 86400000)
+    const key = fmtDate(d)
+    const minutes = Math.round(
+      workouts.filter((w) => w.workoutdate === key).reduce((s, w) => s + w.duration, 0) / 60,
+    )
+    out.push({ name: `${d.getMonth() + 1}/${d.getDate()}`, 분: minutes })
+  }
+  return out
+}
+
 export function thisWeekStart(today: Date): Date {
   const start = new Date(today)
   start.setDate(today.getDate() - today.getDay())

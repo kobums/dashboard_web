@@ -10,8 +10,9 @@ import {
 } from 'recharts'
 import { api } from '../lib/api'
 import type { HealthMetric, Workout } from '../types'
-import { buildWeeklyMinutes, fmtDate, thisWeekStart, WORKOUT_TYPES } from '../lib/fitness'
+import { buildDailyMinutes, buildWeeklyMinutes, fmtDate, thisWeekStart, WORKOUT_TYPES } from '../lib/fitness'
 import ActivityRing from '../components/common/ActivityRing'
+import Modal from '../components/common/Modal'
 import WorkoutForm from '../components/fitness/WorkoutForm'
 import WeeklyChart from '../components/fitness/WeeklyChart'
 import WorkoutList from '../components/fitness/WorkoutList'
@@ -23,6 +24,7 @@ export { WORKOUT_TYPES } from '../lib/fitness'
 export default function Fitness() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [weights, setWeights] = useState<HealthMetric[]>([])
+  const [showForm, setShowForm] = useState(false)
 
   const today = new Date()
   const rangeStart = new Date(today.getTime() - 55 * 86400000) // 8주
@@ -55,6 +57,7 @@ export default function Fitness() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const weeklyData = useMemo(() => buildWeeklyMinutes(workouts, weekStart), [workouts])
+  const dailyData = useMemo(() => buildDailyMinutes(workouts, 14), [workouts])
 
   const weightData = weights.map((m) => ({
     name: `${Number(m.metricdate.slice(5, 7))}/${Number(m.metricdate.slice(8, 10))}`,
@@ -64,7 +67,12 @@ export default function Fitness() {
 
   return (
     <div className="stack desktop-grid">
-      <h1 className="display-title">운동</h1>
+      <div className="page-head">
+        <h1 className="display-title">운동</h1>
+        <button className="page-action" onClick={() => setShowForm(true)}>
+          + 기록 추가
+        </button>
+      </div>
 
       {/* 이번 주 요약 */}
       <section className="card dg-4">
@@ -89,14 +97,14 @@ export default function Fitness() {
       {/* 같은 요일 비교 */}
       <CompareCard className="dg-8" />
 
-      {/* 기록 추가 */}
-      <section className="card dg-4">
-        <h2 className="card-title">기록 추가</h2>
-        <WorkoutForm onSaved={load} />
+      {/* 일별 운동 시간 (최근 2주) */}
+      <section className={`card ${hasWeight ? 'dg-4' : 'dg-6'}`}>
+        <h2 className="card-title">일별 운동 시간</h2>
+        <WeeklyChart data={dailyData} />
       </section>
 
-      {/* 주별 운동 시간 */}
-      <section className={`card ${hasWeight ? 'dg-4' : 'dg-8'}`}>
+      {/* 주별 운동 시간 (최근 8주) */}
+      <section className={`card ${hasWeight ? 'dg-4' : 'dg-6'}`}>
         <h2 className="card-title">주별 운동 시간</h2>
         <WeeklyChart data={weeklyData} />
       </section>
@@ -135,6 +143,16 @@ export default function Fitness() {
         <h2 className="card-title">최근 기록</h2>
         <WorkoutList workouts={workouts} limit={10} onRemove={remove} />
       </section>
+      {showForm && (
+        <Modal title="기록 추가" onClose={() => setShowForm(false)}>
+          <WorkoutForm
+            onSaved={() => {
+              setShowForm(false)
+              load()
+            }}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
