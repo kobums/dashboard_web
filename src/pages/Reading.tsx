@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react'
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '../lib/api'
-import type { ReadingSummary } from '../types'
+import type { ReadingDay, ReadingSummary } from '../types'
+import { thisWeekStart } from '../lib/fitness'
+import { buildReadingDaily, buildReadingHeatDays, buildReadingWeekly } from '../lib/reading'
 import ActivityRing from '../components/common/ActivityRing'
+import CompareCard from '../components/common/CompareCard'
+import Heatmap from '../components/common/Heatmap'
+import WeeklyChart from '../components/fitness/WeeklyChart'
 import BookProgressList from '../components/reading/BookProgressList'
+import ReadingYearlyCard from '../components/reading/ReadingYearlyCard'
 
 export default function Reading() {
   const [summary, setSummary] = useState<ReadingSummary | null>(null)
+  const [daily, setDaily] = useState<ReadingDay[]>([])
   const [error, setError] = useState(false)
 
   const year = new Date().getFullYear()
@@ -27,7 +25,15 @@ export default function Reading() {
         else setError(true)
       })
       .catch(() => setError(true))
+    api
+      .get('/reading/daily')
+      .then((res) => setDaily(res.data.items ?? []))
+      .catch(() => {})
   }, [])
+
+  const heatDays = useMemo(() => buildReadingHeatDays(daily), [daily])
+  const dailyData = useMemo(() => buildReadingDaily(daily, 14), [daily])
+  const weeklyData = useMemo(() => buildReadingWeekly(daily, thisWeekStart(new Date())), [daily])
 
   if (error) {
     return (
@@ -43,11 +49,6 @@ export default function Reading() {
   const goal = summary.goals?.year === year ? summary.goals : null
   const yearly = summary.yearlyStats?.find((y) => y.year === year)
   const completed = goal?.completedBooks ?? yearly?.completedCount ?? 0
-  const monthlyData = (summary.monthlyStats ?? []).map((m) => ({
-    name: `${m.month}월`,
-    권수: m.completedCount,
-    pages: m.totalPages,
-  }))
 
   return (
     <div className="stack desktop-grid">
@@ -81,40 +82,40 @@ export default function Reading() {
         </div>
       </section>
 
-      {/* 월별 완독 */}
-      <section className="card dg-8">
-        <h2 className="card-title">{year}년 월별 완독</h2>
-        <div className="chart-box">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={monthlyData} margin={{ top: 8, right: 0, left: -28, bottom: 0 }}>
-              <CartesianGrid vertical={false} stroke="var(--track)" />
-              <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-48)', fontSize: 12 }} />
-              <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-48)', fontSize: 12 }} />
-              <Tooltip
-                cursor={{ fill: 'var(--cursor-fill)' }}
-                contentStyle={{
-                  borderRadius: 11,
-                  border: '1px solid var(--tooltip-border)', background: 'var(--tooltip-bg)', color: 'var(--ink)',
-                  fontFamily: 'inherit',
-                  fontSize: 13,
-                }}
-                formatter={(value) => [`${value ?? 0}권`, '완독']}
-              />
-              <Bar dataKey="권수" fill="var(--accent)" radius={[4, 4, 0, 0]} maxBarSize={24} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+      {/* 같은 요일 비교 — 세션 기록이 쌓이면 채워진다 */}
+      <CompareCard
+        className="dg-8"
+        metrics={['readingMinutes', 'readingPages']}
+        emptyHint="독서 세션(타이머)을 기록하면 시간·페이지 비교가 여기에 표시됩니다."
+      />
+
+      {/* 일별/주별 독서 시간 */}
+      <section className="card dg-6">
+        <h2 className="card-title">일별 독서 시간</h2>
+        <WeeklyChart data={dailyData} />
+      </section>
+      <section className="card dg-6">
+        <h2 className="card-title">주별 독서 시간</h2>
+        <WeeklyChart data={weeklyData} />
       </section>
 
-      {/* 읽고 있는 책 */}
-      {summary.progress && summary.progress.length > 0 && (
-        <section className="card dg-8">
-          <h2 className="card-title">읽고 있는 책</h2>
-          <BookProgressList books={summary.progress} />
+      {/* 독서 잔디 */}
+      {heatDays.length > 0 && (
+        <section className="card">
+          <div className="card-head">
+            <h2 className="card-title">독서 잔디</h2>
+            <span className="text-secondary" style={{ fontSize: 14 }}>
+              세션 {daily.reduce((s, d) => s + d.sessions, 0)}회 · {daily.reduce((s, d) => s + d.minutes, 0)}분
+            </span>
+          </div>
+          <Heatmap days={heatDays} thresholds={[15, 30, 60]} />
         </section>
       )}
 
-      {/* 카테고리 & 인사이트 — 데스크톱에선 우측 세로 열 */}
+      {/* 연도별 통계 (완독 책 그리드 포함) */}
+      <ReadingYearlyCard initialSummary={summary} className="dg-8" />
+
+      {/* 카테고리 & 인사이트 — 데스크톱 우측 세로 열 */}
       <div className="two-col side-stack dg-4">
         {summary.categoryStats && summary.categoryStats.length > 0 && (
           <section className="card">
@@ -149,6 +150,14 @@ export default function Reading() {
           </section>
         )}
       </div>
+
+      {/* 읽고 있는 책 */}
+      {summary.progress && summary.progress.length > 0 && (
+        <section className="card">
+          <h2 className="card-title">읽고 있는 책</h2>
+          <BookProgressList books={summary.progress} />
+        </section>
+      )}
     </div>
   )
 }
