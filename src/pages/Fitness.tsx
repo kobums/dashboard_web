@@ -16,7 +16,7 @@ import Modal from '../components/common/Modal'
 import WorkoutForm from '../components/fitness/WorkoutForm'
 import WeeklyChart from '../components/fitness/WeeklyChart'
 import WorkoutList from '../components/fitness/WorkoutList'
-import CompareCard from '../components/fitness/CompareCard'
+import CompareCard from '../components/common/CompareCard'
 import YearlyStatsCard from '../components/fitness/YearlyStatsCard'
 
 export { WORKOUT_TYPES } from '../lib/fitness'
@@ -95,7 +95,7 @@ export default function Fitness() {
       </section>
 
       {/* 같은 요일 비교 */}
-      <CompareCard className="dg-8" />
+      <CompareCard className="dg-8" metrics={['steps', 'activeEnergy', 'exerciseMinutes', 'workout']} />
 
       {/* 일별 운동 시간 (최근 2주) */}
       <section className={`card ${hasWeight ? 'dg-4' : 'dg-6'}`}>

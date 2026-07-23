@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
 import type { DevActivity, DevSummary } from '../types'
-import ContributionHeatmap from '../components/dev/ContributionHeatmap'
+import Heatmap from '../components/common/Heatmap'
+import CompareCard from '../components/common/CompareCard'
+import { buildDevHeatDays } from '../lib/reading'
 import YearlyDevCard from '../components/dev/YearlyDevCard'
 import RecentActivityList from '../components/dev/RecentActivityList'
 
@@ -81,11 +83,14 @@ export default function Dev() {
             {summary.total.all.toLocaleString()}회 · 연속 {summary.streak.current}일 (최장 {summary.streak.max}일)
           </span>
         </div>
-        <ContributionHeatmap calendar={summary.calendar} />
+        <Heatmap days={buildDevHeatDays(summary.calendar)} />
       </section>
 
-      {/* 소스별 통계 — 데스크톱: 좌측 세로 열, 연도별과 나란히 */}
-      <div className="two-col side-stack dg-6">
+      {/* 같은 요일 비교 — 커밋 */}
+      <CompareCard className="dg-8" metrics={['dev']} />
+
+      {/* 소스별 통계 — 데스크톱: 우측 세로 열 */}
+      <div className="two-col side-stack dg-4">
         <SourceStatCard
           label="GitHub"
           week={summary.week.github}
@@ -103,11 +108,11 @@ export default function Dev() {
       {/* 연도별 통계 (백필 전체 히스토리) */}
       <YearlyDevCard className="dg-6" />
 
-      {/* 최근 활동 — 데스크톱: 2열 리스트 */}
+      {/* 최근 활동 */}
       {recent.length > 0 && (
-        <section className="card">
+        <section className="card dg-6">
           <h2 className="card-title">최근 활동</h2>
-          <RecentActivityList items={recent} twoCol />
+          <RecentActivityList items={recent} />
         </section>
       )}
     </div>

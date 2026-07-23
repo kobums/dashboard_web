@@ -129,22 +129,42 @@ export interface DevYear {
   monthly: { month: number; total: number }[]
 }
 
-// 운동 통계 (/api/fitness/compare, /api/fitness/yearly)
+// 통합 같은 요일 비교 (/api/compare)
 
-export interface ComparePoint {
-  label: 'base' | 'week' | 'month' | 'year'
+export interface UnifiedPoint {
+  label: 'base' | 'prev' | 'week' | 'month' | 'year'
   date: string
   steps: number | null
   activeEnergy: number | null
   exerciseMinutes: number | null
+  workoutMinutes: number | null
   workoutCount: number
-  workoutMinutes: number
+  devCommits: number | null
+  readingMinutes: number | null
+  readingPages: number | null
 }
 
-export interface FitnessCompare {
+export interface UnifiedCompare {
   baseDate: string
   weekdayLabel: string
-  points: ComparePoint[]
+  points: UnifiedPoint[]
+}
+
+// 독서 (/api/reading/daily, /api/reading/books)
+
+export interface ReadingDay {
+  date: string
+  minutes: number
+  pages: number
+  sessions: number
+}
+
+export interface DoneBook {
+  title: string
+  author: string
+  coverUrl: string
+  rating: number
+  endDate: string
 }
 
 export interface MonthlyFitness {

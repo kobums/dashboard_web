@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import type { DevActivity, DevSummary, HealthMetric, ReadingSummary, Workout } from '../types'
 import { fmtDate, thisWeekStart } from '../lib/fitness'
+import { buildDevHeatDays } from '../lib/reading'
 import ActivityRing from '../components/common/ActivityRing'
 import NotifyBanner from '../components/common/NotifyBanner'
-import ContributionHeatmap from '../components/dev/ContributionHeatmap'
+import Heatmap from '../components/common/Heatmap'
 import BookProgressList from '../components/reading/BookProgressList'
 import RecentActivityList from '../components/dev/RecentActivityList'
 import WorkoutList from '../components/fitness/WorkoutList'
@@ -181,7 +182,7 @@ export default function Overview() {
               {last365Total.toLocaleString()}회 · 최장 연속 {dev.streak.max}일
             </span>
           </div>
-          <ContributionHeatmap calendar={last365} />
+          <Heatmap days={buildDevHeatDays(last365)} />
         </section>
       )}
 
