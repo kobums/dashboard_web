@@ -201,7 +201,7 @@ export default function Overview() {
       {devRecent.length > 0 && (
         <section className="card desktop-only dg-4">
           <h2 className="card-title">최근 개발 활동</h2>
-          <RecentActivityList items={devRecent} limit={6} />
+          <RecentActivityList items={devRecent} />
         </section>
       )}
     </div>
