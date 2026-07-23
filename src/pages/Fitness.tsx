@@ -10,22 +10,15 @@ import {
 } from 'recharts'
 import { api } from '../lib/api'
 import type { HealthMetric, Workout } from '../types'
-import { buildWeeklyMinutes, fmtDate, thisWeekStart } from '../lib/fitness'
+import { buildWeeklyMinutes, fmtDate, thisWeekStart, WORKOUT_TYPES } from '../lib/fitness'
 import ActivityRing from '../components/common/ActivityRing'
 import WorkoutForm from '../components/fitness/WorkoutForm'
 import WeeklyChart from '../components/fitness/WeeklyChart'
+import WorkoutList from '../components/fitness/WorkoutList'
 import CompareCard from '../components/fitness/CompareCard'
 import YearlyStatsCard from '../components/fitness/YearlyStatsCard'
 
-export const WORKOUT_TYPES: Record<string, string> = {
-  weight: '헬스',
-  running: '러닝',
-  cycling: '사이클',
-  swimming: '수영',
-  walking: '걷기',
-  hiking: '등산',
-  etc: '기타',
-}
+export { WORKOUT_TYPES } from '../lib/fitness'
 
 export default function Fitness() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
@@ -68,10 +61,6 @@ export default function Fitness() {
     kg: m.qty,
   }))
   const hasWeight = weightData.length > 1
-
-  const recent = [...workouts]
-    .sort((a, b) => (a.workoutdate < b.workoutdate ? 1 : -1))
-    .slice(0, 10)
 
   return (
     <div className="stack desktop-grid">
@@ -144,33 +133,7 @@ export default function Fitness() {
       {/* 최근 기록 */}
       <section className="card dg-4">
         <h2 className="card-title">최근 기록</h2>
-        {recent.length === 0 ? (
-          <p className="text-secondary" style={{ marginTop: 12 }}>
-            아직 기록이 없습니다. 위에서 첫 운동을 기록해 보세요.
-          </p>
-        ) : (
-          <ul className="workout-list">
-            {recent.map((w) => (
-              <li key={w.id} className="workout-item">
-                <div className="workout-type">{WORKOUT_TYPES[w.type] ?? w.type}</div>
-                <div className="workout-info">
-                  <p className="workout-meta">
-                    {w.workoutdate} · {Math.round(w.duration / 60)}분
-                    {w.distance > 0 && ` · ${w.distance}km`}
-                    {w.calories > 0 && ` · ${w.calories}kcal`}
-                    {w.source === 'apple' && ' ·  Health'}
-                  </p>
-                  {(w.memo || w.title) && <p className="workout-memo">{w.memo || w.title}</p>}
-                </div>
-                {w.source === 'manual' && (
-                  <button className="workout-delete" onClick={() => remove(w)} aria-label="기록 삭제">
-                    삭제
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <WorkoutList workouts={workouts} limit={10} onRemove={remove} />
       </section>
     </div>
   )

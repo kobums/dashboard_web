@@ -1,5 +1,15 @@
 import type { Workout } from '../types'
 
+export const WORKOUT_TYPES: Record<string, string> = {
+  weight: '헬스',
+  running: '러닝',
+  cycling: '사이클',
+  swimming: '수영',
+  walking: '걷기',
+  hiking: '등산',
+  etc: '기타',
+}
+
 export const fmtDate = (d: Date) => d.toISOString().slice(0, 10)
 
 // 최근 8주 주별 운동 시간(분) 집계 — 운동 페이지와 홈(데스크톱) 공용.

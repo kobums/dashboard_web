@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import type { DevActivity, DevSummary, HealthMetric, ReadingSummary, Workout } from '../types'
-import { buildWeeklyMinutes, fmtDate, thisWeekStart } from '../lib/fitness'
+import { fmtDate, thisWeekStart } from '../lib/fitness'
 import ActivityRing from '../components/common/ActivityRing'
 import NotifyBanner from '../components/common/NotifyBanner'
 import ContributionHeatmap from '../components/dev/ContributionHeatmap'
 import BookProgressList from '../components/reading/BookProgressList'
-import WeeklyChart from '../components/fitness/WeeklyChart'
 import RecentActivityList from '../components/dev/RecentActivityList'
+import WorkoutList from '../components/fitness/WorkoutList'
 
 function Card({
   to,
@@ -92,7 +92,6 @@ export default function Overview() {
   const weekMinutes = Math.round(thisWeek.reduce((sum, w) => sum + w.duration, 0) / 60)
   const weekSteps = metrics.filter((m) => m.name === 'steps').reduce((s, m) => s + m.qty, 0)
   const hasFitnessData = workouts.length > 0 || metrics.length > 0
-  const weeklyData = buildWeeklyMinutes(workouts, weekStart)
 
   // 개발: 최근 7일 중 활동일 비율이 링, 중앙은 이번 주 컨트리뷰션
   const last7 = dev?.calendar.slice(-7) ?? []
@@ -194,8 +193,8 @@ export default function Overview() {
       )}
 
       <section className="card desktop-only dg-4">
-        <h2 className="card-title">주별 운동 시간</h2>
-        <WeeklyChart data={weeklyData} />
+        <h2 className="card-title">최근 운동 기록</h2>
+        <WorkoutList workouts={workouts} limit={20} />
       </section>
 
       {devRecent.length > 0 && (
