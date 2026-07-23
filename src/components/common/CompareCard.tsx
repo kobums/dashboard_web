@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../../lib/api'
 import type { UnifiedCompare, UnifiedPoint } from '../../types'
+import { SkLines } from './Skeleton'
 
 // 통합 같은 요일 비교 카드 — /api/compare 를 쓰고 metrics prop 으로 표시 지표를 고른다.
 // 시점: 기준일 / 전날 / 1주 전 / 4주 전 / 1년 전 (전날 외엔 같은 요일 보존).
@@ -95,9 +96,13 @@ export default function CompareCard({
     return (
       <section className={`card ${className}`}>
         <h2 className="card-title">나와의 비교</h2>
-        <p className="text-tertiary" style={{ marginTop: 12 }}>
-          {failed ? '비교 데이터를 불러오지 못했습니다.' : '불러오는 중…'}
-        </p>
+        {failed ? (
+          <p className="text-tertiary" style={{ marginTop: 12 }}>
+            비교 데이터를 불러오지 못했습니다.
+          </p>
+        ) : (
+          <SkLines rows={2} />
+        )}
       </section>
     )
   }

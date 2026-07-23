@@ -7,6 +7,7 @@ import { buildDevHeatDays } from '../lib/reading'
 import ActivityRing from '../components/common/ActivityRing'
 import NotifyBanner from '../components/common/NotifyBanner'
 import Heatmap from '../components/common/Heatmap'
+import { SkBlock, SkLines, SkRingRow } from '../components/common/Skeleton'
 import BookProgressList from '../components/reading/BookProgressList'
 import RecentActivityList from '../components/dev/RecentActivityList'
 import WorkoutList from '../components/fitness/WorkoutList'
@@ -40,12 +41,13 @@ function Stat({ value, label }: { value: React.ReactNode; label: string }) {
 }
 
 export default function Overview() {
+  // null = 아직 로딩 중 (스켈레톤 표시), 빈 배열 = 로딩 완료·데이터 없음
   const [reading, setReading] = useState<ReadingSummary | null>(null)
   const [readingError, setReadingError] = useState(false)
-  const [workouts, setWorkouts] = useState<Workout[]>([])
-  const [metrics, setMetrics] = useState<HealthMetric[]>([])
+  const [workouts, setWorkouts] = useState<Workout[] | null>(null)
+  const [metrics, setMetrics] = useState<HealthMetric[] | null>(null)
   const [dev, setDev] = useState<DevSummary | null>(null)
-  const [devRecent, setDevRecent] = useState<DevActivity[]>([])
+  const [devRecent, setDevRecent] = useState<DevActivity[] | null>(null)
 
   const today = new Date()
   const weekAgo = new Date(today.getTime() - 6 * 86400000)
@@ -62,11 +64,11 @@ export default function Overview() {
     api
       .get(`/workout?startworkoutdate=${fmtDate(eightWeeksAgo)}&endworkoutdate=${fmtDate(today)}&pagesize=500`)
       .then((res) => setWorkouts(res.data.items ?? []))
-      .catch(() => {})
+      .catch(() => setWorkouts([]))
     api
       .get(`/health/metrics?from=${fmtDate(weekAgo)}&to=${fmtDate(today)}`)
       .then((res) => setMetrics(res.data.items ?? []))
-      .catch(() => {})
+      .catch(() => setMetrics([]))
     api
       .get('/dev/summary?days=0') // dev 페이지와 같은 캐시 키(전체 기간) — 캐시 히트
       .then((res) => {
@@ -76,7 +78,7 @@ export default function Overview() {
     api
       .get('/dev/recent')
       .then((res) => setDevRecent(res.data.items ?? []))
-      .catch(() => {})
+      .catch(() => setDevRecent([]))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -88,11 +90,14 @@ export default function Overview() {
   const goalProgress = goal && goal.targetBooks > 0 ? completedThisYear / goal.targetBooks : 0
   const readingCount = reading?.progress?.filter((b) => b.status === 'reading').length ?? 0
 
+  const workoutList = workouts ?? []
+  const metricList = metrics ?? []
+  const fitnessLoading = workouts === null || metrics === null
   const weekStart = thisWeekStart(today)
-  const thisWeek = workouts.filter((w) => w.workoutdate >= fmtDate(weekStart))
+  const thisWeek = workoutList.filter((w) => w.workoutdate >= fmtDate(weekStart))
   const weekMinutes = Math.round(thisWeek.reduce((sum, w) => sum + w.duration, 0) / 60)
-  const weekSteps = metrics.filter((m) => m.name === 'steps').reduce((s, m) => s + m.qty, 0)
-  const hasFitnessData = workouts.length > 0 || metrics.length > 0
+  const weekSteps = metricList.filter((m) => m.name === 'steps').reduce((s, m) => s + m.qty, 0)
+  const hasFitnessData = workoutList.length > 0 || metricList.length > 0
 
   // 개발: 최근 7일 중 활동일 비율이 링, 중앙은 이번 주 컨트리뷰션
   const last7 = dev?.calendar.slice(-7) ?? []
@@ -116,7 +121,7 @@ export default function Overview() {
         {readingError ? (
           <p className="text-secondary">독서 데이터를 불러오지 못했습니다. snippet 연동 설정을 확인하세요.</p>
         ) : !reading ? (
-          <p className="text-tertiary">불러오는 중…</p>
+          <SkRingRow />
         ) : (
           <div className="card-row">
             <ActivityRing progress={goalProgress} color="var(--accent)" size={96} strokeWidth={9}>
@@ -132,7 +137,9 @@ export default function Overview() {
       </Card>
 
       <Card to="/fitness" eyebrow="운동" className="dg-4">
-        {hasFitnessData ? (
+        {fitnessLoading ? (
+          <SkRingRow />
+        ) : hasFitnessData ? (
           <div className="card-row">
             <ActivityRing
               progress={weekMinutes / 150} // WHO 주간 권장 150분 기준
@@ -157,7 +164,7 @@ export default function Overview() {
 
       <Card to="/dev" eyebrow="개발" className="dg-4">
         {!dev ? (
-          <p className="text-tertiary">불러오는 중…</p>
+          <SkRingRow />
         ) : (
           <div className="card-row">
             <ActivityRing progress={devActiveDays / 7} color="var(--accent)" size={96} strokeWidth={9}>
@@ -174,7 +181,7 @@ export default function Overview() {
 
       {/* ---- 이하 데스크톱 전용 상세 미리보기 ---- */}
 
-      {dev && (
+      {dev ? (
         <section className="card desktop-only">
           <div className="card-head">
             <h2 className="card-title">최근 1년 컨트리뷰션</h2>
@@ -184,26 +191,41 @@ export default function Overview() {
           </div>
           <Heatmap days={buildDevHeatDays(last365)} />
         </section>
+      ) : (
+        <section className="card desktop-only">
+          <h2 className="card-title">최근 1년 컨트리뷰션</h2>
+          <SkBlock height={132} />
+        </section>
       )}
 
-      {reading?.progress && reading.progress.length > 0 && (
+      {!reading && !readingError ? (
+        <section className="card desktop-only dg-4">
+          <h2 className="card-title">읽고 있는 책</h2>
+          <SkLines rows={5} />
+        </section>
+      ) : reading?.progress && reading.progress.length > 0 ? (
         <section className="card desktop-only dg-4">
           <h2 className="card-title">읽고 있는 책</h2>
           <BookProgressList books={reading.progress} />
         </section>
-      )}
+      ) : null}
 
       <section className="card desktop-only dg-4">
         <h2 className="card-title">최근 운동 기록</h2>
-        <WorkoutList workouts={workouts} limit={20} />
+        {workouts === null ? <SkLines rows={5} /> : <WorkoutList workouts={workoutList} limit={20} />}
       </section>
 
-      {devRecent.length > 0 && (
+      {devRecent === null ? (
+        <section className="card desktop-only dg-4">
+          <h2 className="card-title">최근 개발 활동</h2>
+          <SkLines rows={5} />
+        </section>
+      ) : devRecent.length > 0 ? (
         <section className="card desktop-only dg-4">
           <h2 className="card-title">최근 개발 활동</h2>
           <RecentActivityList items={devRecent} />
         </section>
-      )}
+      ) : null}
     </div>
   )
 }
