@@ -31,19 +31,21 @@ src/
 ├── types.ts              API 응답 타입
 ├── lib/
 │   ├── api.ts            axios 인스턴스 (Bearer, 401 → /login)
-│   └── fitness.ts        주별 집계 유틸 (Fitness·홈 공용)
+│   ├── fitness.ts        주별 집계 유틸 (Fitness·홈 공용)
+│   └── reading.ts        독서 일별 데이터 가공 (잔디·일별/주별 차트) + 개발 잔디 변환
 ├── pages/
 │   ├── Overview.tsx      홈 — 알림 배너 + 3 요약 카드 + (데스크톱) 히트맵·책·운동차트·최근활동
-│   ├── Reading.tsx       목표 링 / 월별 완독 / 읽는 책 / 카테고리·인사이트
-│   ├── Fitness.tsx       주간 링 / 같은 요일 비교 / 기록 폼 / 차트 / 연도별 / 최근
-│   ├── Dev.tsx           전체 히트맵 / 소스 카드 / 연도별 / 최근 활동
+│   ├── Reading.tsx       목표 링 / 나와의 비교 / 일별·주별 독서 시간 / 독서 잔디 / 연도별(완독 표지 그리드) / 읽는 책
+│   ├── Fitness.tsx       주간 링 / 나와의 비교 / 일별·주별 운동 시간 / 기록 추가 모달 / 연도별 / 최근
+│   ├── Dev.tsx           전체 잔디 / 나와의 비교 / 소스 카드 / 연도별 / 최근 활동
 │   └── Login.tsx         액세스 키 입력
 └── components/
-    ├── common/           ActivityRing(시그니처), AppShell(탭 네비+테마 토글), NotifyBanner(알림 배너)
-    ├── reading/          BookProgressList
-    ├── fitness/          WorkoutForm, WeeklyChart, CompareCard, YearlyStatsCard
-    └── dev/              ContributionHeatmap(커스텀 SVG, 1월=연도 라벨),
-                          YearlyDevCard, RecentActivityList
+    ├── common/           ActivityRing(시그니처), AppShell(탭 네비+테마 토글), NotifyBanner(알림 배너),
+    │                     CompareCard(통합 /api/compare — metrics prop 으로 지표 선택, 세 페이지 공용),
+    │                     Heatmap(범용 잔디 SVG — thresholds prop, 1월=연도 라벨, 개발·독서 공용)
+    ├── reading/          BookProgressList, ReadingYearlyCard(연도 칩 + 월별 차트 + 완독 표지 그리드)
+    ├── fitness/          WorkoutForm, WeeklyChart, YearlyStatsCard
+    └── dev/              YearlyDevCard, RecentActivityList
 ```
 
 ## 개발 · 빌드
