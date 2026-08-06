@@ -1185,6 +1185,78 @@ a.card:active {
   transform: scale(0.95);
 }
 
+/* ---- 알림 설정 (NotifySettings 모달) ---- */
+
+.push-settings {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.push-desc {
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.push-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.push-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.push-row-title {
+  font-weight: 600;
+}
+
+.push-row-sub {
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+/* DESIGN: button-secondary — 중립 배경 pill, scale(0.95) 프레스 */
+.push-btn {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.push-btn:active {
+  transform: scale(0.95);
+}
+
+.push-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+.push-message {
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.push-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 /* ---- 접근성 ---- */
 
 :focus-visible {

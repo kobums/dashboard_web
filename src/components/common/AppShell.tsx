@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { getTheme, nextTheme, setTheme, THEME_ICONS, THEME_LABELS, type ThemeMode } from '../../lib/theme'
+import NotifySettings from './NotifySettings'
 
 const tabs = [
   { to: '/', label: '홈' },
@@ -11,6 +12,7 @@ const tabs = [
 
 export default function AppShell() {
   const [theme, setThemeState] = useState<ThemeMode>(getTheme)
+  const [showNotify, setShowNotify] = useState(false)
 
   function cycleTheme() {
     const next = nextTheme(theme)
@@ -39,6 +41,14 @@ export default function AppShell() {
           </nav>
           <button
             className="theme-toggle"
+            onClick={() => setShowNotify(true)}
+            title="알림 설정"
+            aria-label="알림 설정"
+          >
+            🔔
+          </button>
+          <button
+            className="theme-toggle"
             onClick={cycleTheme}
             title={`테마: ${THEME_LABELS[theme]} (클릭해서 변경)`}
             aria-label={`테마: ${THEME_LABELS[theme]}`}
@@ -50,6 +60,7 @@ export default function AppShell() {
       <main>
         <Outlet />
       </main>
+      {showNotify && <NotifySettings onClose={() => setShowNotify(false)} />}
     </div>
   )
 }
