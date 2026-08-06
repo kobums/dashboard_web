@@ -33,6 +33,7 @@ src/
 ├── lib/
 │   ├── api.ts            axios 인스턴스 (Bearer, 401 → /login)
 │   ├── fitness.ts        주별 집계 유틸 (Fitness·홈 공용)
+│   ├── push.ts           웹푸시 구독 (지원 감지·iOS PWA 안내·subscribe/unsubscribe/테스트)
 │   └── reading.ts        독서 일별 데이터 가공 (잔디·일별/주별 차트) + 개발 잔디 변환
 ├── pages/
 │   ├── Overview.tsx      홈 — 알림 배너 + 3 요약 카드 + (데스크톱) 히트맵·책·운동차트·최근활동
@@ -41,7 +42,8 @@ src/
 │   ├── Dev.tsx           전체 잔디 / 나와의 비교 / 소스 카드 / 연도별 / 최근 활동
 │   └── Login.tsx         액세스 키 입력
 └── components/
-    ├── common/           ActivityRing(시그니처), AppShell(탭 네비+테마 토글), NotifyBanner(알림 배너),
+    ├── common/           ActivityRing(시그니처), AppShell(탭 네비+알림 설정+테마 토글), NotifyBanner(알림 배너),
+    │                     NotifySettings(알림 설정 모달 — 웹푸시 켜기/끄기·ntfy 상태·테스트 발송),
     │                     CompareCard(통합 /api/compare — metrics prop 으로 지표 선택, 세 페이지 공용),
     │                     Heatmap(범용 잔디 SVG — thresholds prop, 1월=연도 라벨, 개발·독서 공용)
     ├── reading/          BookProgressList, ReadingYearlyCard(연도 칩 + 월별 차트 + 완독 표지 그리드)
@@ -57,3 +59,10 @@ npm run build    # dist/ 생성 → dashboard_go 의 make web 이 복사해 이�
 ```
 
 인증: 로그인 화면에서 서버 `DASH_TOKEN` 값을 입력 → localStorage `dash_token` → axios 인터셉터가 Bearer 로 전송, 401 이면 로그인으로 리다이렉트.
+
+## PWA · 웹푸시
+
+- `public/manifest.webmanifest`(standalone) + `public/sw.js`(푸시 표시·클릭 시 열기) + PNG 아이콘(192/512/apple-touch-icon 180)
+- **iOS 는 16.4+ 에서 홈 화면에 추가한 PWA 에서만 웹푸시 동작** — Safari 탭에는 PushManager 가 없어 설정 모달이 "홈 화면에 추가" 안내를 띄운다
+- 아이콘 재생성: `favicon.svg` 의 width/height 를 키운 사본을 qlmanage 로 렌더 후 흰 배경 68% 합성 (히스토리의 스크립트 참조)
+- 헤더 🔔 → NotifySettings 모달: 웹푸시 구독 토글(`/api/push/*`), ntfy 구성 상태, 테스트 발송
