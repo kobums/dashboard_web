@@ -1257,6 +1257,1140 @@ a.card:active {
   justify-content: flex-end;
 }
 
+/* ---- 웨이트 (노션 운동 기록) ---- */
+
+.lift-sync-status {
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+}
+
+.page-action:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+.card code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--parchment);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.lift-link {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+.lift-link:hover {
+  text-decoration: underline;
+}
+
+/* 종목 카드 그리드 — 카드 안의 카드는 pearl 서페이스 + hairline (그림자 없음) */
+.lift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.lift-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--pearl);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.1s;
+}
+
+.lift-card:hover {
+  border-color: var(--card-hover-border);
+}
+
+.lift-card:active {
+  transform: scale(0.98);
+}
+
+.lift-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lift-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+  min-width: 0;
+}
+
+.lift-tag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.lift-card-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lift-card-value {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.374px;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.lift-card-unit {
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+.lift-delta {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.lift-card-sets {
+  font-size: 14px;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+  overflow-wrap: anywhere;
+}
+
+.lift-card-meta {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--divider-soft);
+  font-size: 13px;
+}
+
+.lift-card-meta li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lift-card-meta li > span:first-child {
+  flex-shrink: 0;
+  color: var(--ink-48);
+}
+
+.lift-card-meta li > span:last-child {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.lift-card-meta em {
+  font-style: normal;
+  color: var(--ink-48);
+}
+
+.lift-target {
+  font-weight: 600;
+}
+
+.lift-card-foot {
+  font-size: 12px;
+  color: var(--ink-tertiary);
+}
+
+/* 차트 범례 — 단일 액센트라 선 모양(실선/점선/막대)으로 구분 */
+.lift-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.lift-legend > span {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.lift-legend > span:first-child {
+  margin-left: 0;
+}
+
+.lift-legend-line {
+  width: 16px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.lift-legend-dash {
+  width: 16px;
+  height: 0;
+  border-top: 2px dashed var(--accent);
+}
+
+.lift-legend-bar {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.18;
+}
+
+.lift-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.lift-session-list {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lift-session {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 0;
+  border-top: 1px solid var(--divider-soft);
+}
+
+.lift-session-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lift-session-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+}
+
+.lift-session-stat {
+  font-size: 13px;
+  color: var(--ink-48);
+  text-align: right;
+}
+
+.lift-session-sets {
+  font-size: 15px;
+  letter-spacing: -0.224px;
+  overflow-wrap: anywhere;
+}
+
+.lift-session-sub {
+  font-size: 13px;
+  color: var(--ink-48);
+  overflow-wrap: anywhere;
+}
+
+.lift-pr-badge {
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.lift-subtitle {
+  margin-top: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.224px;
+}
+
+.lift-insight {
+  margin-top: 8px;
+  font-size: 15px;
+  letter-spacing: -0.224px;
+}
+
+.lift-select {
+  width: auto;
+  max-width: 60%;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+/* 최근 신기록 */
+.pr-list {
+  list-style: none;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pr-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  column-gap: 10px;
+  align-items: baseline;
+  padding: 10px 0;
+  border: none;
+  border-top: 1px solid var(--divider-soft);
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.pr-item:active {
+  transform: scale(0.98);
+}
+
+.pr-date {
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+.pr-name {
+  min-width: 0;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pr-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.pr-text {
+  grid-column: 2 / 4;
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+/* 주간 4분할 체크 */
+.split-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-top: 16px;
+}
+
+.split-check {
+  list-style: none;
+  flex: 1 1 200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.split-check li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.split-check li.done {
+  color: var(--ink);
+}
+
+.split-mark {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--track);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.split-check li.done .split-mark {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.split-sets {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.split-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.part-multiples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 12px;
+  margin-top: 20px;
+}
+
+.part-multiple-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.part-multiple-title span {
+  font-weight: 400;
+  color: var(--ink-48);
+}
+
+.part-multiple-chart {
+  height: 96px;
+  margin-top: 4px;
+}
+
+/* 캘린더 — 월요일 시작 7열. 운동일은 히트맵 램프의 첫 단계(연한 액센트) */
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-month {
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 88px;
+  text-align: center;
+}
+
+.cal-nav-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--accent);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.cal-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.cal-nav-btn:disabled {
+  color: var(--ink-tertiary);
+  cursor: default;
+  transform: none;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.cal-weekday {
+  padding-bottom: 4px;
+  font-size: 12px;
+  color: var(--ink-48);
+  text-align: center;
+}
+
+.cal-cell {
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  padding: 4px;
+  border: 1px solid var(--divider-soft);
+  border-radius: var(--r-sm);
+  background: var(--canvas);
+  color: var(--ink);
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.cal-cell:active {
+  transform: scale(0.95);
+}
+
+.cal-cell:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+.cal-cell.active {
+  background: var(--heat-1);
+  border-color: var(--heat-1);
+}
+
+.cal-cell.today {
+  border-color: var(--accent);
+}
+
+.cal-day {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cal-parts {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+}
+
+.cal-parts span,
+.cal-min,
+.cal-steps {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-min,
+.cal-steps {
+  margin-top: auto;
+  font-size: 10px;
+  color: var(--ink-48);
+}
+
+.cal-min + .cal-steps {
+  margin-top: 0;
+}
+
+.day-detail {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.day-detail .lift-session-list {
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .cal-cell {
+    min-height: 76px;
+    padding: 6px;
+  }
+
+  .cal-parts,
+  .cal-min,
+  .cal-steps {
+    font-size: 11px;
+  }
+}
+
+/* 탭 6개(식단 추가) — 좁은 폰에서 한 줄 유지. 그래도 넘치면 네비 알약만 가로 스크롤 */
+@media (max-width: 400px) {
+  .nav-link {
+    padding: 6px 6px;
+  }
+
+  .header-right {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nav {
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---- 운동 동작 그림 (Everkinetic 선화, public/exercises) ----
+   선만 있는 SVG 를 mask 로 써서 --ink 로 칠한다 → 라이트/다크 자동. 그림자·배경 없음.
+   animate: 시작↔끝 자세를 GIF 처럼 끊어서 번갈아 표시. */
+
+.ex-art {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ex-art-sm {
+  width: 64px;
+  height: 64px;
+}
+
+.ex-art-md {
+  width: 100%;
+  height: 120px;
+}
+
+.ex-art-lg {
+  width: 100%;
+  height: 200px;
+}
+
+.ex-art-empty {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+}
+
+.ex-art-frame {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.ex-art-animate .ex-art-start {
+  animation: ex-art-start 2.4s infinite;
+}
+
+.ex-art-animate .ex-art-end {
+  animation: ex-art-end 2.4s infinite;
+}
+
+@keyframes ex-art-start {
+  0%,
+  49.9% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ex-art-end {
+  0%,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ex-art-animate .ex-art-start {
+    display: none;
+  }
+
+  .ex-art-animate .ex-art-end {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+.ex-art-caption {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--ink-48);
+  text-align: center;
+}
+
+.ex-art-caption a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.lift-card-main .ex-art {
+  margin-left: auto;
+  align-self: center;
+}
+
+.log-catalog-item.has-art {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.log-catalog-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.log-editor-meta .ex-art {
+  margin-bottom: 8px;
+}
+
+/* ---- 웨이트 입력 시트 (오늘 기록 → 노션) ----
+   헬스장에서 한 손 조작 전제: 터치 타깃 44px 이상, 모바일은 아래에서 올라오는 높은 시트. */
+
+.page-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.page-action-secondary {
+  background: var(--canvas);
+  color: var(--accent);
+  border: 1px solid var(--hairline);
+}
+
+.page-action:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+.modal-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modal-sheet {
+  max-width: 520px;
+  max-height: 92dvh;
+}
+
+@media (max-width: 639px) {
+  .modal-overlay-sheet {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-sheet {
+    max-width: none;
+    height: 92dvh;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    border-bottom: none;
+    padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+.log-list,
+.log-pick,
+.log-editor {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.log-date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.log-date-label {
+  flex: 1;
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink-48);
+}
+
+.log-conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-conditions .year-chips,
+.log-pick .year-chips,
+.log-mode {
+  margin-top: 0;
+}
+
+.log-conditions .year-chip,
+.log-pick .year-chip,
+.log-mode .year-chip {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 15px;
+}
+
+.log-bw {
+  margin-left: auto;
+}
+
+.log-notice {
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--parchment);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.log-notice-pr {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.log-empty-text {
+  font-size: 15px;
+  color: var(--ink-48);
+}
+
+.log-empty {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.log-entries,
+.log-catalog {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--divider-soft);
+}
+
+.log-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--divider-soft);
+}
+
+.log-entry-main,
+.log-catalog-item {
+  flex: 1;
+  min-width: 0;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.log-catalog li {
+  border-bottom: 1px solid var(--divider-soft);
+}
+
+.log-catalog-item {
+  width: 100%;
+}
+
+.log-catalog-name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.log-catalog-sub {
+  font-size: 14px;
+  color: var(--ink-48);
+  overflow-wrap: anywhere;
+}
+
+.log-done {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.log-entry-delete,
+.text-button {
+  min-height: 44px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  color: var(--ink-48);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.text-button {
+  min-height: 0;
+  padding: 0;
+  color: var(--accent);
+}
+
+.log-confirm {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.log-danger {
+  background: var(--danger);
+}
+
+.log-add,
+.log-add-set {
+  min-height: 48px;
+}
+
+.log-new {
+  display: flex;
+  gap: 8px;
+}
+
+.log-new .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.log-editor-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-part {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+.log-last {
+  font-size: 15px;
+  color: var(--ink-48);
+  overflow-wrap: anywhere;
+}
+
+.log-last strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.log-restored {
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.log-steppers,
+.log-cardio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stepper-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepper-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--accent);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.stepper-btn:active {
+  transform: scale(0.95);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
+.stepper-big .stepper-btn {
+  width: 52px;
+  height: 52px;
+  font-size: 26px;
+}
+
+.stepper-value {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+}
+
+.stepper-value input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+}
+
+.stepper-big .stepper-value input {
+  font-size: 28px;
+}
+
+.stepper-unit {
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.log-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-preview {
+  margin-left: 6px;
+  color: var(--ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.log-set-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.log-set-chip {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--parchment);
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.log-set-chip:active {
+  transform: scale(0.95);
+}
+
+.log-set-chip span {
+  color: var(--ink-48);
+}
+
+.log-hint {
+  margin-left: 6px;
+  color: var(--accent);
+}
+
+.log-footer {
+  position: sticky;
+  bottom: -16px;
+  margin: 0 -4px;
+  padding: 12px 4px 4px;
+  background: var(--canvas);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-footer-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.log-save {
+  min-height: 48px;
+  flex: 1;
+  max-width: 240px;
+}
+
+.log-secondary {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.log-secondary:active {
+  transform: scale(0.95);
+}
+
+.log-error {
+  font-size: 14px;
+  color: var(--danger);
+}
+
 /* ---- 접근성 ---- */
 
 :focus-visible {

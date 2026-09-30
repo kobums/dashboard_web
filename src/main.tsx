@@ -9,6 +9,7 @@ import Overview from './pages/Overview'
 import Reading from './pages/Reading'
 import Fitness from './pages/Fitness'
 import Dev from './pages/Dev'
+import Lift from './pages/Lift'
 
 function RequireAuth() {
   if (!getToken()) {
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/" element={<Overview />} />
             <Route path="/reading" element={<Reading />} />
             <Route path="/fitness" element={<Fitness />} />
+            <Route path="/lift" element={<Lift />} />
             <Route path="/dev" element={<Dev />} />
           </Route>
         </Route>

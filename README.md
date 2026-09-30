@@ -33,12 +33,15 @@ src/
 ├── lib/
 │   ├── api.ts            axios 인스턴스 (Bearer, 401 → /login)
 │   ├── fitness.ts        주별 집계 유틸 (Fitness·홈 공용)
+│   ├── exerciseArt.ts    종목 → 동작 그림(Everkinetic SVG, public/exercises) 매핑
+│   ├── lift.ts           웨이트 포맷·4분할 연속 계산·월 이동·세트 직렬화(serializeSets)·e1RM
 │   ├── push.ts           웹푸시 구독 (지원 감지·iOS PWA 안내·subscribe/unsubscribe/테스트)
 │   └── reading.ts        독서 일별 데이터 가공 (잔디·일별/주별 차트) + 개발 잔디 변환
 ├── pages/
 │   ├── Overview.tsx      홈 — 알림 배너 + 3 요약 카드 + (데스크톱) 히트맵·책·운동차트·최근활동
 │   ├── Reading.tsx       목표 링 / 나와의 비교 / 일별·주별 독서 시간 / 독서 잔디 / 연도별(완독 표지 그리드) / 읽는 책
 │   ├── Fitness.tsx       주간 링 / 나와의 비교 / 일별·주별 운동 시간 / 기록 추가 모달 / 연도별 / 최근
+│   ├── Lift.tsx          웨이트 — 동기화 상태 / 종목별 성장(상세 모달) / 최근 PR·유산소 / 부위별 주간 세트 / 캘린더 / 체중 vs 근력
 │   ├── Dev.tsx           전체 잔디 / 나와의 비교 / 소스 카드 / 연도별 / 최근 활동
 │   └── Login.tsx         액세스 키 입력
 └── components/
@@ -48,6 +51,9 @@ src/
     │                     Heatmap(범용 잔디 SVG — thresholds prop, 1월=연도 라벨, 개발·독서 공용)
     ├── reading/          BookProgressList, ReadingYearlyCard(연도 칩 + 월별 차트 + 완독 표지 그리드)
     ├── fitness/          WorkoutForm, WeeklyChart, YearlyStatsCard
+    ├── lift/             ExerciseGrowth, ExerciseDetail, WeeklyVolume, LiftCalendar, WeightVsStrength,
+    │                     ExerciseArt(동작 그림 — mask 로 테마색, animate 시 시작↔끝 자세 교차),
+    │                     LogSheet(「오늘 기록」 시트 — 날짜·컨디션·그날 목록·종목 선택), LogEditor(세트 스테퍼·미리보기·다음 목표·임시저장)
     └── dev/              YearlyDevCard, RecentActivityList
 ```
 

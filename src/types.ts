@@ -183,3 +183,202 @@ export interface YearFitness {
   byType: Record<string, number>
   monthly: MonthlyFitness[]
 }
+
+// ---- 웨이트 (노션 운동 기록 → /api/lift/*) ----
+
+export interface LiftSet {
+  weight: number
+  reps: number
+  bodyweight: boolean
+}
+
+export interface LiftAchievement {
+  hit: number
+  total: number
+}
+
+export interface LiftSyncStatus {
+  configured: boolean
+  lastSyncAt: string
+  ok: boolean
+  error: string
+  days: number
+  exercises: number
+  sets: number
+}
+
+export interface LiftSessionSummary {
+  date: string
+  e1rm: number
+  topWeight: number
+  topReps: number
+  volume: number
+  sets: number
+  mainText: string
+}
+
+export interface LiftExerciseSummary {
+  name: string
+  part: string
+  bodyweight: boolean
+  sessions: number
+  firstDate: string
+  lastDate: string
+  best: { e1rm: number; weight: number; reps: number; date: string }
+  last: LiftSessionSummary
+  prev: LiftSessionSummary | null
+  deltaE1rm: number | null
+  deltaVolumePct: number | null
+  nextTarget: string
+  lastAchievement: LiftAchievement | null
+}
+
+export interface LiftCardio {
+  name: string
+  sessions: number
+  lastDate: string
+  totalMinutes: number
+  totalDistance: number
+}
+
+export interface LiftWeek {
+  weekStart: string
+  days: number
+  sets: Record<string, number>
+  volume: Record<string, number>
+  splitDone: string[]
+  cardioMinutes: number
+  cardioSessions: number
+}
+
+export interface LiftPR {
+  date: string
+  name: string
+  kind: 'e1rm' | 'reps'
+  value: number
+  text: string
+}
+
+export interface LiftParseError {
+  date: string
+  name: string
+  error: string
+  notionUrl: string
+}
+
+export interface LiftOverview {
+  sync: LiftSyncStatus
+  exercises: LiftExerciseSummary[]
+  cardio: LiftCardio[]
+  weekly: LiftWeek[]
+  prs: LiftPR[]
+  parseErrors: LiftParseError[]
+  bodyweight: { date: string; weight: number }[]
+}
+
+export interface LiftSession {
+  date: string
+  notionUrl: string
+  warmup: LiftSet[]
+  main: LiftSet[]
+  warmupText: string
+  mainText: string
+  e1rm: number
+  topWeight: number
+  topReps: number
+  volume: number
+  totalReps: number
+  goal: string
+  achievement: LiftAchievement | null
+  target: string
+  isPR: boolean
+  memo: string
+  condition: string
+}
+
+export interface LiftExerciseDetail {
+  name: string
+  part: string
+  bodyweight: boolean
+  sessions: LiftSession[]
+}
+
+export interface LiftCalendarExercise {
+  name: string
+  part: string
+  warmupText: string
+  mainText: string
+  main: LiftSet[]
+  volume: number
+  e1rm: number
+  minutes: number
+  speed: number
+  incline: number
+  distance: number
+  memo: string
+}
+
+export interface LiftCalendarDay {
+  date: string
+  lift: null | {
+    title: string
+    parts: string[]
+    condition: string
+    summary: string
+    cardio: string
+    notionUrl: string
+  }
+  exercises: LiftCalendarExercise[]
+  apple: { sessions: number; minutes: number; calories: number; types: string[] }
+  steps: number
+  weight: number
+}
+
+// ---- 웨이트 입력 (대시보드 → 노션, /api/lift/form·log) ----
+
+export interface LiftCardioValues {
+  minutes: number
+  speed: number
+  incline: number
+  distance: number
+}
+
+export interface LiftFormEntry extends LiftCardioValues {
+  id: string
+  name: string
+  part: string
+  warmupText: string
+  mainText: string
+  target: string
+  warmup: LiftSet[]
+  main: LiftSet[]
+  condition: string
+  memo: string
+}
+
+export interface LiftCatalogLast extends LiftCardioValues {
+  date: string
+  warmupText: string
+  mainText: string
+  target: string
+  warmup: LiftSet[]
+  main: LiftSet[]
+}
+
+export interface LiftCatalogItem {
+  name: string
+  part: string
+  bodyweight: boolean
+  last: LiftCatalogLast | null
+  goal: LiftSet[]
+}
+
+export interface LiftForm {
+  date: string
+  suggestedPart: string
+  day: null | { id: string; title: string; parts: string[]; condition: string }
+  entries: LiftFormEntry[]
+  catalog: LiftCatalogItem[]
+  parts: string[]
+  conditions: string[]
+}
