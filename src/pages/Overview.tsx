@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
-import type { DevActivity, DevSummary, HealthMetric, ReadingSummary, Workout } from '../types'
+import type { DevActivity, DevSummary, DietDay, HealthMetric, ReadingSummary, Workout } from '../types'
 import { fmtDate, thisWeekStart } from '../lib/fitness'
 import { buildDevHeatDays } from '../lib/reading'
 import ActivityRing from '../components/common/ActivityRing'
@@ -48,6 +48,8 @@ export default function Overview() {
   const [metrics, setMetrics] = useState<HealthMetric[] | null>(null)
   const [dev, setDev] = useState<DevSummary | null>(null)
   const [devRecent, setDevRecent] = useState<DevActivity[] | null>(null)
+  const [diet, setDiet] = useState<DietDay | null>(null)
+  const [dietError, setDietError] = useState(false)
 
   const today = new Date()
   const weekAgo = new Date(today.getTime() - 6 * 86400000)
@@ -75,6 +77,13 @@ export default function Overview() {
         if (res.data.code === 'ok' && res.data.item) setDev(res.data.item)
       })
       .catch(() => {})
+    api
+      .get('/diet/day') // 서버 기준 오늘(KST)
+      .then((res) => {
+        if (res.data.code === 'ok') setDiet(res.data)
+        else setDietError(true)
+      })
+      .catch(() => setDietError(true))
     api
       .get('/dev/recent')
       .then((res) => setDevRecent(res.data.items ?? []))
@@ -105,6 +114,12 @@ export default function Overview() {
   const last7 = dev?.calendar.slice(-7) ?? []
   const devActiveDays = last7.filter((d) => d.total > 0).length
 
+  // 식단: 오늘 섭취 kcal / 운동일·휴식일 목표가 링, 옆에 단백질과 남은 칼로리
+  const dietKcal = Math.round(diet?.totals.kcal ?? 0)
+  const dietTarget = Math.round(diet?.targets.kcal ?? 0)
+  const dietLeft = dietTarget - dietKcal
+  const dietItems = diet?.meals.reduce((n, m) => n + m.items.length, 0) ?? 0
+
   // 홈 히트맵은 요약이므로 최근 1년만 (전체는 개발 페이지에서)
   const last365 = dev?.calendar.slice(-365) ?? []
   const last365Total = last365.reduce((s, d) => s + d.total, 0)
@@ -119,7 +134,7 @@ export default function Overview() {
 
       <NotifyBanner />
 
-      <Card to="/reading" eyebrow="독서" className="dg-4">
+      <Card to="/reading" eyebrow="독서" className="dg-3">
         {readingError ? (
           <p className="text-secondary">독서 데이터를 불러오지 못했습니다. snippet 연동 설정을 확인하세요.</p>
         ) : !reading ? (
@@ -138,7 +153,7 @@ export default function Overview() {
         )}
       </Card>
 
-      <Card to="/fitness" eyebrow="운동" className="dg-4">
+      <Card to="/fitness" eyebrow="운동" className="dg-3">
         {fitnessLoading ? (
           <SkRingRow />
         ) : hasFitnessData ? (
@@ -164,7 +179,33 @@ export default function Overview() {
         )}
       </Card>
 
-      <Card to="/dev" eyebrow="개발" className="dg-4">
+      <Card to="/diet" eyebrow={diet ? `식단 · ${diet.dayType === 'training' ? '운동일' : '휴식일'}` : '식단'} className="dg-3">
+        {dietError ? (
+          <p className="text-secondary">식단 데이터를 불러오지 못했습니다.</p>
+        ) : !diet ? (
+          <SkRingRow />
+        ) : (
+          <div className="card-row">
+            <ActivityRing progress={dietTarget > 0 ? dietKcal / dietTarget : 0} color="var(--accent)" size={96} strokeWidth={9}>
+              <span className="ring-value">{dietKcal.toLocaleString()}</span>
+              <span className="ring-sub">/ {dietTarget.toLocaleString()}kcal</span>
+            </ActivityRing>
+            <div className="stat-grid">
+              <Stat value={`${Math.round(diet.totals.protein)}g`} label={`단백질 / ${Math.round(diet.targets.protein)}g`} />
+              {dietItems === 0 ? (
+                <Stat value="—" label="기록 전" />
+              ) : (
+                <Stat
+                  value={`${Math.abs(dietLeft).toLocaleString()}`}
+                  label={dietLeft >= 0 ? 'kcal 남음' : 'kcal 초과'}
+                />
+              )}
+            </div>
+          </div>
+        )}
+      </Card>
+
+      <Card to="/dev" eyebrow="개발" className="dg-3">
         {!dev ? (
           <SkRingRow />
         ) : (
