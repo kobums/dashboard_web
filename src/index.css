@@ -2391,6 +2391,378 @@ a.card:active {
   color: var(--danger);
 }
 
+/* ---- 식단 (노션 「식단 일지」, /diet) ----
+   목표 대비 링·막대·차트 모두 단일 액센트, 목표선은 중립 잉크 점선. 초과는 색 대신 라벨. */
+
+.diet-date-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.diet-date-label {
+  min-width: 128px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink-80);
+}
+
+.diet-daytype {
+  flex-shrink: 1;
+  min-width: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  color: var(--ink-80);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.diet-today {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.diet-bars {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diet-remain {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.diet-bar-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.diet-bar-head strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.diet-bar-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.diet-meals {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-meal {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider-soft);
+}
+
+.diet-meal:last-child {
+  border-bottom: none;
+}
+
+.diet-meal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diet-meal-name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.diet-meal-total {
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.diet-add-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--accent);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.diet-add-btn:active {
+  transform: scale(0.95);
+}
+
+.diet-copy {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.diet-items {
+  list-style: none;
+  margin-top: 4px;
+}
+
+.diet-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diet-item + .diet-item {
+  border-top: 1px solid var(--divider-soft);
+}
+
+.diet-item-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.diet-item-name {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.diet-item-grams {
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+.diet-item-sub {
+  font-size: 13px;
+  color: var(--ink-48);
+}
+
+.diet-item-del {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  color: var(--ink-48);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.diet-confirm {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.diet-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.diet-meal-chips {
+  margin-top: 0;
+}
+
+.diet-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+}
+
+.diet-tab {
+  flex: 1;
+  min-height: 40px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--ink-48);
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.diet-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.diet-manual-start {
+  min-height: 48px;
+}
+
+.diet-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.diet-editor label {
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-macros-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--parchment);
+  font-size: 15px;
+}
+
+.diet-macros-preview strong {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.diet-num-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.diet-num {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.diet-num-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diet-num-input .form-input {
+  min-width: 0;
+}
+
+.diet-num-unit {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.diet-footer {
+  position: sticky;
+  bottom: 0;
+}
+
+.diet-chart-label {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--ink-48);
+}
+
+.diet-chart {
+  margin-top: 4px;
+}
+
+.diet-chart-sm {
+  height: 160px;
+}
+
+.diet-weeks {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-week {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--divider-soft);
+  font-size: 14px;
+}
+
+.diet-week-name {
+  min-width: 56px;
+  font-weight: 600;
+}
+
+.diet-week-stats {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.diet-week-stats div {
+  display: flex;
+  gap: 4px;
+}
+
+.diet-week-stats dt {
+  color: var(--ink-48);
+}
+
+.diet-legend-bar {
+  display: inline-block;
+  width: 12px;
+  height: 10px;
+  margin: 0 4px 0 0;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.35;
+  vertical-align: middle;
+}
+
+.diet-targets {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.diet-targets-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.diet-targets-group legend {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 /* ---- 접근성 ---- */
 
 :focus-visible {

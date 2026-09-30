@@ -382,3 +382,91 @@ export interface LiftForm {
   parts: string[]
   conditions: string[]
 }
+
+// ---- 식단 (/api/diet/*) — 원본은 노션 「식단 일지」 ----
+
+export interface Macros {
+  kcal: number
+  protein: number
+  carbs: number
+  fat: number
+}
+
+export type DayType = 'training' | 'rest'
+
+export interface DietItem extends Macros {
+  id: string
+  food: string
+  grams: number
+  foodCode: string
+  memo: string
+}
+
+export interface DietMeal {
+  meal: string
+  items: DietItem[]
+  totals: Macros
+}
+
+export interface DietFrequent extends Macros {
+  food: string
+  grams: number
+  foodCode: string
+  meal: string
+  count: number
+}
+
+export interface DietDay {
+  date: string
+  dayType: DayType
+  dayTypeReason: string
+  targets: Macros
+  totals: Macros
+  meals: DietMeal[]
+  frequent: DietFrequent[]
+  searchEnabled: boolean
+}
+
+export interface DietSummaryDay {
+  date: string
+  dayType: DayType
+  logged: boolean
+  totals: Macros
+  target: Macros
+  activeEnergy: number
+  burn: number | null
+  balance: number | null
+  weight: number
+}
+
+export interface DietWeek {
+  weekStart: string
+  loggedDays: number
+  avg: Macros | null
+  avgBalance: number | null
+  proteinHitDays: number
+  avgWeight: number | null
+  weightDelta: number | null
+}
+
+export interface DietTargets {
+  training: Macros
+  rest: Macros
+}
+
+export interface DietSummary {
+  targets: DietTargets
+  bmr: number
+  days: DietSummaryDay[]
+  weekly: DietWeek[]
+}
+
+export interface DietSearchItem {
+  foodCode: string
+  name: string
+  maker: string
+  basis: string
+  basisGrams: number
+  per: Macros
+  servingGrams: number
+}

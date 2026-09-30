@@ -8,6 +8,7 @@ const tabs = [
   { to: '/reading', label: '독서' },
   { to: '/fitness', label: '운동' },
   { to: '/lift', label: '웨이트' },
+  { to: '/diet', label: '식단' },
   { to: '/dev', label: '개발' },
 ]
 
