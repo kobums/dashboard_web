@@ -10,3 +10,8 @@
 - 가공본 역시 CC BY-SA 4.0 으로 배포됩니다.
 
 대시보드 종목 ↔ 그림 매핑은 `src/lib/exerciseArt.ts`. 토러·해머 등 머신 종목은 같은 움직임의 일반 동작 그림(참고용)입니다.
+
+## 직접 그린 그림 (Everkinetic 아님)
+
+`incline-walk-*`, `treadmill-run-*`, `futsal-*`, `jiu-jitsu-belt-*` 는 이 프로젝트에서 직접 그린 선 픽토그램입니다
+(Everkinetic 에 해당 동작이 없어서). 출처 표기 대상이 아니며 `src/lib/exerciseArt.ts` 에서 `own: true` 로 구분합니다.

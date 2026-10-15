@@ -69,12 +69,14 @@ export default function ExerciseDetail({ name }: { name: string }) {
       {art && (
         <figure>
           <ExerciseArt name={data.name} size="lg" animate />
-          <figcaption className="ex-art-caption">
-            {art.exact ? '' : `참고 동작: ${art.title} · `}
-            <a href={ART_CREDIT.url} target="_blank" rel="noreferrer">
-              {ART_CREDIT.text}
-            </a>
-          </figcaption>
+          {!art.own && (
+            <figcaption className="ex-art-caption">
+              {art.exact ? '' : `참고 동작: ${art.title} · `}
+              <a href={ART_CREDIT.url} target="_blank" rel="noreferrer">
+                {ART_CREDIT.text}
+              </a>
+            </figcaption>
+          )}
         </figure>
       )}
       <p className="text-secondary" style={{ fontSize: 14, marginTop: 4 }}>
