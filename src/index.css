@@ -2547,6 +2547,9 @@ a.card:active {
   text-align: left;
   cursor: pointer;
 }
+.diet-item-main:disabled {
+  cursor: default; /* 노션 「식단 기록」 항목 — 읽기 전용, 색은 그대로 */
+}
 
 .diet-item-name {
   font-size: 15px;

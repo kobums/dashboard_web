@@ -7,6 +7,9 @@ import { shiftDay } from '../../lib/lift'
 // 끼니별 기록 — 5끼니 고정 순서. 항목 탭 → 수정, 삭제는 시트 안 확인(브라우저 dialog 금지).
 // 빈 끼니는 「어제 이 끼니 복사」로 같은 메뉴를 한 번에 넣을 수 있다.
 
+// 노션 「식단 기록」(하루 1페이지)에서 풀어 온 항목은 id 가 「페이지id#순번」 — 대시보드에서 수정·삭제 불가
+const isNotionDayItem = (it: DietItem) => it.id.includes('#')
+
 export default function MealList({
   day,
   onAdd,
@@ -106,7 +109,12 @@ export default function MealList({
                     </li>
                   ) : (
                     <li key={it.id} className="diet-item">
-                      <button className="diet-item-main" onClick={() => onEdit(m.meal, it)}>
+                      <button
+                        className="diet-item-main"
+                        onClick={() => onEdit(m.meal, it)}
+                        disabled={isNotionDayItem(it)}
+                        title={isNotionDayItem(it) ? '노션 「식단 기록」에서 가져온 항목 — 노션에서 수정' : undefined}
+                      >
                         <span className="diet-item-name">
                           {it.food}
                           {it.grams > 0 && <span className="diet-item-grams"> {fmtNum(it.grams)}g</span>}
@@ -115,9 +123,11 @@ export default function MealList({
                           {kcalText(it.kcal)} · {pfc(it)}
                         </span>
                       </button>
-                      <button className="diet-item-del" onClick={() => setConfirmId(it.id)} aria-label={`${it.food} 삭제`}>
-                        ✕
-                      </button>
+                      {!isNotionDayItem(it) && (
+                        <button className="diet-item-del" onClick={() => setConfirmId(it.id)} aria-label={`${it.food} 삭제`}>
+                          ✕
+                        </button>
+                      )}
                     </li>
                   ),
                 )}
