@@ -10,6 +10,7 @@ import DietTrend from '../components/diet/DietTrend'
 import DietWeight from '../components/diet/DietWeight'
 import AddSheet from '../components/diet/AddSheet'
 import TargetsModal from '../components/diet/TargetsModal'
+import Icon from '../components/common/Icon'
 
 // 식단 — 노션 「식단 일지」 복제본(/api/diet/*). 입력은 노션에 먼저 쓰고 동기화 후 반영.
 // 섹션: 날짜 · 목표 대비 · 끼니별 기록 · 주간 추이 · 체중과 함께.
@@ -68,11 +69,11 @@ export default function Diet() {
           <h1 className="display-title">식단</h1>
           <div className="diet-date-nav">
             <button className="stepper-btn" onClick={() => setDate(shiftDay(date, -1))} aria-label="전날">
-              ‹
+              <Icon name="chevron-left" />
             </button>
             <span className="diet-date-label">{dateLabel(date, today)}</span>
             <button className="stepper-btn" onClick={() => setDate(shiftDay(date, 1))} disabled={date >= today} aria-label="다음날">
-              ›
+              <Icon name="chevron-right" />
             </button>
           </div>
         </div>

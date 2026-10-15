@@ -3,6 +3,7 @@ import { api } from '../../lib/api'
 import type { DietDay, DietItem, DietSearchItem, Macros } from '../../types'
 import { fmtNum, kcalText, MEALS, pfc, scaleMacros, ZERO } from '../../lib/diet'
 import Modal from '../common/Modal'
+import Icon from '../common/Icon'
 
 // 음식 추가/수정 시트 — 끼니 칩 + 탭(자주 먹은 · 검색 · 직접 입력) → 양 조절 편집기 → 노션 저장.
 // 자주 먹은/검색 결과는 g 당 값으로 환산해 두고 양(±10g)을 바꾸면 영양소가 따라 바뀐다.
@@ -139,7 +140,7 @@ export default function AddSheet({
       head={
         draft && !editing ? (
           <button className="modal-close" onClick={discard} aria-label="뒤로">
-            ‹
+            <Icon name="chevron-left" />
           </button>
         ) : undefined
       }
@@ -391,7 +392,7 @@ function Editor({
         <span className="form-label">양</span>
         <div className="stepper-row stepper-big">
           <button className="stepper-btn" onClick={() => setGrams(draft.grams - 10)} disabled={draft.grams <= 0} aria-label="10g 줄이기">
-            −
+            <Icon name="minus" />
           </button>
           <span className="stepper-value">
             <input
@@ -407,7 +408,7 @@ function Editor({
             <span className="stepper-unit">g</span>
           </span>
           <button className="stepper-btn" onClick={() => setGrams(draft.grams + 10)} aria-label="10g 늘리기">
-            +
+            <Icon name="plus" />
           </button>
         </div>
       </div>

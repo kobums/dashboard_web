@@ -5,6 +5,7 @@ import { fmtVolume, kg, monthKey, shiftMonth } from '../../lib/lift'
 import { WORKOUT_TYPES } from '../../lib/fitness'
 import Modal from '../common/Modal'
 import { SkBlock } from '../common/Skeleton'
+import Icon from '../common/Icon'
 
 // 운동 캘린더 — 노션 운동일(부위) + Apple 운동 시간 + 걸음을 날짜로 합친 월 그리드 (월요일 시작).
 // 셀 탭 → 그날 상세 모달.
@@ -48,7 +49,7 @@ export default function LiftCalendar({ className = '' }: { className?: string })
         <h2 className="card-title">캘린더</h2>
         <div className="cal-nav">
           <button className="cal-nav-btn" onClick={() => setMonth(shiftMonth(month, -1))} aria-label="이전 달">
-            ‹
+            <Icon name="chevron-left" />
           </button>
           <span className="cal-month">
             {y}년 {m}월
@@ -59,7 +60,7 @@ export default function LiftCalendar({ className = '' }: { className?: string })
             disabled={isCurrent}
             aria-label="다음 달"
           >
-            ›
+            <Icon name="chevron-right" />
           </button>
         </div>
       </div>

@@ -1693,6 +1693,9 @@ a.card:active {
 }
 
 .cal-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   border: 1px solid var(--hairline);
@@ -2493,6 +2496,9 @@ a.card:active {
 }
 
 .diet-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: auto;
   flex-shrink: 0;
   width: 44px;
@@ -2567,6 +2573,9 @@ a.card:active {
 }
 
 .diet-item-del {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -2780,4 +2789,21 @@ a.card:active {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* 버튼 아이콘 (components/common/Icon) — 부모 font-size 크기, currentColor 선 */
+.icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stepper-btn .icon,
+.diet-add-btn .icon {
+  width: 0.8em;
+  height: 0.8em;
 }

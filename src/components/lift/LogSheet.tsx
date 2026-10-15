@@ -6,6 +6,7 @@ import Modal from '../common/Modal'
 import { SkLines } from '../common/Skeleton'
 import LogEditor, { type SavedResult } from './LogEditor'
 import ExerciseArt from './ExerciseArt'
+import Icon from '../common/Icon'
 
 // 오늘 기록 시트 — 대시보드에서 노션 운동 일지로 기록한다.
 // 흐름: 날짜·컨디션 → 그날 기록 목록(탭=수정, 삭제) → 종목 추가(부위 → 종목) → 편집기.
@@ -124,7 +125,7 @@ export default function LogSheet({ onClose }: { onClose: (changed: boolean) => v
   const back =
     view.kind !== 'list' ? (
       <button className="modal-close" onClick={() => setView({ kind: 'list' })} aria-label="뒤로">
-        ‹
+        <Icon name="chevron-left" />
       </button>
     ) : null
 
@@ -218,7 +219,7 @@ export default function LogSheet({ onClose }: { onClose: (changed: boolean) => v
         <div className="log-list">
           <div className="log-date-nav">
             <button className="stepper-btn" onClick={() => setDate(shiftDay(date, -1))} aria-label="전날">
-              ‹
+              <Icon name="chevron-left" />
             </button>
             <span className="log-date-label">{form.day?.title || (form.entries.length ? '' : '기록 없음')}</span>
             <button
@@ -227,7 +228,7 @@ export default function LogSheet({ onClose }: { onClose: (changed: boolean) => v
               disabled={date >= today}
               aria-label="다음날"
             >
-              ›
+              <Icon name="chevron-right" />
             </button>
           </div>
 
