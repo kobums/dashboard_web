@@ -1,4 +1,4 @@
-import type { Workout } from '../types'
+import type { LiftCalendarDay, Workout } from '../types'
 
 export const WORKOUT_TYPES: Record<string, string> = {
   weight: '헬스',
@@ -48,4 +48,44 @@ export function thisWeekStart(today: Date): Date {
   const start = new Date(today)
   start.setDate(today.getDate() - today.getDay())
   return start
+}
+
+// 노션 운동 일지(웨이트 탭) → 운동 목록 행. 홈 「최근 운동 기록」에서 Apple 기록과 합칠 때 쓴다.
+// 근력 종목은 하루 1행(웨이트 · 부위 · 종목 수), 유산소 행(주짓수·러닝·축구·풋살 등)은 종목마다 1행.
+// id 는 Apple 기록과 겹치지 않게 음수.
+export function liftDaysToWorkouts(days: LiftCalendarDay[]): Workout[] {
+  const out: Workout[] = []
+  for (const day of days) {
+    const strength = day.exercises.filter((e) => e.part !== '유산소')
+    if (strength.length > 0) {
+      const parts = [...new Set(strength.map((e) => e.part).filter(Boolean))]
+      out.push({
+        id: -(out.length + 1),
+        type: '웨이트',
+        title: '',
+        workoutdate: day.date,
+        starttime: '',
+        duration: 0,
+        calories: 0,
+        distance: 0,
+        memo: `${parts.join('·')} · ${strength.length}종목`,
+        source: 'notion',
+      })
+    }
+    for (const e of day.exercises.filter((x) => x.part === '유산소')) {
+      out.push({
+        id: -(out.length + 1),
+        type: e.name,
+        title: '',
+        workoutdate: day.date,
+        starttime: '',
+        duration: Math.round(e.minutes * 60),
+        calories: 0,
+        distance: e.distance,
+        memo: e.memo,
+        source: 'notion',
+      })
+    }
+  }
+  return out
 }
