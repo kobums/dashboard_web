@@ -429,10 +429,7 @@ function Editor({
         </div>
       )}
 
-      <label>
-        <span className="form-label">메모</span>
-        <input className="form-input" value={draft.memo} onChange={(e) => onChange({ memo: e.target.value })} placeholder="예: 외식, 소스 조금" />
-      </label>
+      {/* 메모 칸 없음 — 노션 「식단 기록」 표에 메모 열이 없다 (하루 메모는 노션 페이지 「메모」 속성에) */}
     </div>
   )
 }
