@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
-import type { DevActivity, DevSummary, DietDay, HealthMetric, ReadingSummary, Workout } from '../types'
-import { fmtDate, thisWeekStart } from '../lib/fitness'
+import type { DevActivity, DevSummary, DietDay, HealthMetric, LiftCalendarDay, ReadingSummary, Workout } from '../types'
+import { fmtDate, liftDaysToWorkouts, thisWeekStart } from '../lib/fitness'
+import { monthKey, shiftMonth } from '../lib/lift'
 import { buildDevHeatDays } from '../lib/reading'
 import ActivityRing from '../components/common/ActivityRing'
 import NotifyBanner from '../components/common/NotifyBanner'
@@ -45,6 +46,7 @@ export default function Overview() {
   const [reading, setReading] = useState<ReadingSummary | null>(null)
   const [readingError, setReadingError] = useState(false)
   const [workouts, setWorkouts] = useState<Workout[] | null>(null)
+  const [liftDays, setLiftDays] = useState<LiftCalendarDay[] | null>(null) // 노션 운동 일지 — 이번 달 + 지난 달
   const [metrics, setMetrics] = useState<HealthMetric[] | null>(null)
   const [dev, setDev] = useState<DevSummary | null>(null)
   const [devRecent, setDevRecent] = useState<DevActivity[] | null>(null)
@@ -67,6 +69,15 @@ export default function Overview() {
       .get(`/workout?startworkoutdate=${fmtDate(eightWeeksAgo)}&endworkoutdate=${fmtDate(today)}&pagesize=500`)
       .then((res) => setWorkouts(res.data.items ?? []))
       .catch(() => setWorkouts([]))
+    const thisMonth = monthKey(today)
+    Promise.all(
+      [shiftMonth(thisMonth, -1), thisMonth].map((m) =>
+        api
+          .get(`/lift/calendar?month=${m}`)
+          .then((res): LiftCalendarDay[] => (res.data.code === 'ok' ? res.data.days ?? [] : []))
+          .catch((): LiftCalendarDay[] => []),
+      ),
+    ).then((months) => setLiftDays(months.flat()))
     api
       .get(`/health/metrics?from=${fmtDate(weekAgo)}&to=${fmtDate(today)}`)
       .then((res) => setMetrics(res.data.items ?? []))
@@ -102,6 +113,8 @@ export default function Overview() {
   const readingCount = readingBooks.length
 
   const workoutList = workouts ?? []
+  // 최근 운동 기록 = Apple 기록 + 노션 운동 일지(웨이트·주짓수·축구 등)
+  const recentWorkouts = [...workoutList, ...liftDaysToWorkouts(liftDays ?? [])]
   const metricList = metrics ?? []
   const fitnessLoading = workouts === null || metrics === null
   const weekStart = thisWeekStart(today)
@@ -255,7 +268,11 @@ export default function Overview() {
 
       <section className="card desktop-only dg-4">
         <h2 className="card-title">최근 운동 기록</h2>
-        {workouts === null ? <SkLines rows={5} /> : <WorkoutList workouts={workoutList} limit={20} />}
+        {workouts === null || liftDays === null ? (
+          <SkLines rows={5} />
+        ) : (
+          <WorkoutList workouts={recentWorkouts} limit={20} />
+        )}
       </section>
 
       {devRecent === null ? (

@@ -2,6 +2,7 @@ import type { Workout } from '../../types'
 import { WORKOUT_TYPES } from '../../lib/fitness'
 
 // 운동 기록 목록 (타입 배지 + 날짜·시간·거리·칼로리) — 운동 페이지와 홈 공용.
+// 홈은 노션 운동 일지(source 'notion', 시간 없는 웨이트 행 포함)도 섞어서 넘긴다.
 // onRemove 를 주면 수동 기록에 삭제 버튼 표시 (운동 페이지 전용).
 
 export default function WorkoutList({
@@ -28,7 +29,8 @@ export default function WorkoutList({
           <div className="workout-type">{WORKOUT_TYPES[w.type] ?? w.type}</div>
           <div className="workout-info">
             <p className="workout-meta">
-              {w.workoutdate} · {Math.round(w.duration / 60)}분
+              {w.workoutdate}
+              {w.duration > 0 && ` · ${Math.round(w.duration / 60)}분`}
               {w.distance > 0 && ` · ${w.distance}km`}
               {w.calories > 0 && ` · ${w.calories}kcal`}
               {w.source === 'apple' && ' ·  Health'}
