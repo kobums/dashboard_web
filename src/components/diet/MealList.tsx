@@ -3,6 +3,7 @@ import { api } from '../../lib/api'
 import type { DietDay, DietItem } from '../../types'
 import { fmtNum, kcalText, pfc } from '../../lib/diet'
 import { shiftDay } from '../../lib/lift'
+import Icon from '../common/Icon'
 
 // 끼니별 기록 — 5끼니 고정 순서. 항목 탭 → 수정, 삭제는 시트 안 확인(브라우저 dialog 금지).
 // 빈 끼니는 「어제 이 끼니 복사」로 같은 메뉴를 한 번에 넣을 수 있다.
@@ -80,7 +81,7 @@ export default function MealList({
                 </span>
               )}
               <button className="diet-add-btn" onClick={() => onAdd(m.meal)} aria-label={`${m.meal} 추가`}>
-                +
+                <Icon name="plus" />
               </button>
             </div>
 
@@ -125,7 +126,7 @@ export default function MealList({
                       </button>
                       {!isNotionDayItem(it) && (
                         <button className="diet-item-del" onClick={() => setConfirmId(it.id)} aria-label={`${it.food} 삭제`}>
-                          ✕
+                          <Icon name="close" />
                         </button>
                       )}
                     </li>

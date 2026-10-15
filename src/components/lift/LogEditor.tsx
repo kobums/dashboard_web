@@ -13,6 +13,7 @@ import {
   shortDate,
 } from '../../lib/lift'
 import ExerciseArt from './ExerciseArt'
+import Icon from '../common/Icon'
 
 // 종목 1개 기록 편집기 — 근력(웜업/본세트 세트 빌더 + 다음 목표) 또는 유산소(시간·속도·경사·거리).
 // 헬스장에서 한 손으로 쓰는 전제: 큰 +/− 스테퍼, 지난 기록·목표로 미리 채움, 입력 중 상태는 localStorage 초안.
@@ -370,7 +371,7 @@ function Stepper({
       <span className="form-label">{label}</span>
       <div className="stepper-row">
         <button className="stepper-btn" onClick={() => set(value - step)} aria-label={`${label} ${step} 줄이기`}>
-          −
+          <Icon name="minus" />
         </button>
         <label className="stepper-value">
           <input
@@ -387,7 +388,7 @@ function Stepper({
           {unit && <span className="stepper-unit">{unit}</span>}
         </label>
         <button className="stepper-btn" onClick={() => set(value + step)} aria-label={`${label} ${step} 늘리기`}>
-          +
+          <Icon name="plus" />
         </button>
       </div>
     </div>
