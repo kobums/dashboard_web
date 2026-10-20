@@ -151,6 +151,7 @@ export interface UnifiedCompare {
 }
 
 // 독서 (/api/reading/daily, /api/reading/books)
+// ReadingDay.pages = 세션 페이지와 snippet 읽은 페이지 로그 중 큰 값 (로그만 있는 날은 minutes·sessions 0)
 
 export interface ReadingDay {
   date: string

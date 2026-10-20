@@ -8,9 +8,19 @@ import {
   YAxis,
 } from 'recharts'
 
-// 주별 운동 시간 바 차트 — 운동 페이지와 홈(데스크톱) 공용.
+// 주별 운동 시간 바 차트 — 운동 페이지와 홈(데스크톱) 공용. 독서 탭은 dataKey·unit·label 로 페이지 차트에 쓴다.
 
-export default function WeeklyChart({ data }: { data: { name: string; 분: number }[] }) {
+export default function WeeklyChart({
+  data,
+  dataKey = '분',
+  unit = '분',
+  label = '운동 시간',
+}: {
+  data: { name: string; [key: string]: string | number }[]
+  dataKey?: string
+  unit?: string
+  label?: string
+}) {
   return (
     <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
@@ -21,9 +31,9 @@ export default function WeeklyChart({ data }: { data: { name: string; 분: numbe
           <Tooltip
             cursor={{ fill: 'var(--cursor-fill)' }}
             contentStyle={{ borderRadius: 11, border: '1px solid var(--tooltip-border)', background: 'var(--tooltip-bg)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13 }}
-            formatter={(value) => [`${value ?? 0}분`, '운동 시간']}
+            formatter={(value) => [`${value ?? 0}${unit}`, label]}
           />
-          <Bar dataKey="분" fill="var(--accent)" radius={[4, 4, 0, 0]} maxBarSize={24} />
+          <Bar dataKey={dataKey} fill="var(--accent)" radius={[4, 4, 0, 0]} maxBarSize={24} />
         </BarChart>
       </ResponsiveContainer>
     </div>
