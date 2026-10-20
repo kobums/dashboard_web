@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { api } from '../../lib/api'
+import { fmtDate } from '../../lib/fitness'
 import { WORKOUT_TYPES } from '../../pages/Fitness'
 
-const todayStr = () => new Date().toISOString().slice(0, 10)
+const todayStr = () => fmtDate(new Date())
 
 export default function WorkoutForm({ onSaved }: { onSaved: () => void }) {
   const [type, setType] = useState('weight')

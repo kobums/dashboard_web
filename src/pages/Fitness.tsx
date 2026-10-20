@@ -9,9 +9,17 @@ import {
   YAxis,
 } from 'recharts'
 import { api } from '../lib/api'
-import type { HealthMetric, Workout } from '../types'
-import { buildDailyMinutes, buildWeeklyMinutes, fmtDate, thisWeekStart, WORKOUT_TYPES } from '../lib/fitness'
+import type { FitnessDay, HealthMetric, Workout } from '../types'
+import {
+  buildDailyMinutes,
+  buildFitnessHeatDays,
+  buildWeeklyMinutes,
+  fmtDate,
+  thisWeekStart,
+  WORKOUT_TYPES,
+} from '../lib/fitness'
 import ActivityRing from '../components/common/ActivityRing'
+import Heatmap from '../components/common/Heatmap'
 import Modal from '../components/common/Modal'
 import WorkoutForm from '../components/fitness/WorkoutForm'
 import WeeklyChart from '../components/fitness/WeeklyChart'
@@ -24,6 +32,7 @@ export { WORKOUT_TYPES } from '../lib/fitness'
 export default function Fitness() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [weights, setWeights] = useState<HealthMetric[]>([])
+  const [daily, setDaily] = useState<FitnessDay[]>([])
   const [showForm, setShowForm] = useState(false)
 
   const today = new Date()
@@ -37,6 +46,10 @@ export default function Fitness() {
     api
       .get(`/health/metrics?name=weight&from=${fmtDate(rangeStart)}&to=${fmtDate(today)}`)
       .then((res) => setWeights(res.data.items ?? []))
+      .catch(() => {})
+    api
+      .get('/fitness/daily')
+      .then((res) => setDaily(res.data.items ?? []))
       .catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -58,6 +71,9 @@ export default function Fitness() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const weeklyData = useMemo(() => buildWeeklyMinutes(workouts, weekStart), [workouts])
   const dailyData = useMemo(() => buildDailyMinutes(workouts, 14), [workouts])
+  const heatDays = useMemo(() => buildFitnessHeatDays(daily), [daily])
+  const activeDays = daily.filter((d) => d.count > 0 || d.lift).length
+  const totalMinutes = daily.reduce((s, d) => s + d.minutes, 0)
 
   const weightData = weights.map((m) => ({
     name: `${Number(m.metricdate.slice(5, 7))}/${Number(m.metricdate.slice(8, 10))}`,
@@ -132,6 +148,19 @@ export default function Fitness() {
               </LineChart>
             </ResponsiveContainer>
           </div>
+        </section>
+      )}
+
+      {/* 운동 잔디 — Apple·수기 운동 분 + 노션 웨이트 기록일 */}
+      {heatDays.length > 0 && (
+        <section className="card">
+          <div className="card-head">
+            <h2 className="card-title">운동 잔디</h2>
+            <span className="text-secondary" style={{ fontSize: 14 }}>
+              {activeDays}일 · {totalMinutes.toLocaleString()}분
+            </span>
+          </div>
+          <Heatmap days={heatDays} thresholds={[20, 45, 90]} />
         </section>
       )}
 

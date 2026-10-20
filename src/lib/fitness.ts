@@ -1,4 +1,5 @@
-import type { LiftCalendarDay, Workout } from '../types'
+import type { HeatDay } from '../components/common/Heatmap'
+import type { FitnessDay, LiftCalendarDay, Workout } from '../types'
 
 export const WORKOUT_TYPES: Record<string, string> = {
   weight: '헬스',
@@ -10,7 +11,10 @@ export const WORKOUT_TYPES: Record<string, string> = {
   etc: '기타',
 }
 
-export const fmtDate = (d: Date) => d.toISOString().slice(0, 10)
+// 로컬(한국) 날짜 YYYY-MM-DD. toISOString 은 UTC 라 오전 9시 전엔 하루 전 날짜가 나와
+// 아침에 폰으로 열면 오늘 기록이 빠지고 이번 주 범위가 하루 어긋났다.
+export const fmtDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
 // 최근 8주 주별 운동 시간(분) 집계 — 운동 페이지와 홈(데스크톱) 공용.
 // weekStart: 이번 주 일요일 00:00 기준.
@@ -45,8 +49,7 @@ export function buildDailyMinutes(workouts: Workout[], days = 14) {
 }
 
 export function thisWeekStart(today: Date): Date {
-  const start = new Date(today)
-  start.setDate(today.getDate() - today.getDay())
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay())
   return start
 }
 
@@ -86,6 +89,41 @@ export function liftDaysToWorkouts(days: LiftCalendarDay[]): Workout[] {
         source: 'notion',
       })
     }
+  }
+  return out
+}
+
+// 웨이트만 노션에 적고 Apple 운동이 없는 날 — 운동 시간을 모르니 잔디에선 중간 농도로 보이게 이만큼으로 친다.
+export const LIFT_ONLY_MINUTES = 45
+
+// 첫 기록일 ~ 오늘을 하루 단위로 채운 운동 잔디 (농도 = 운동 분)
+export function buildFitnessHeatDays(days: FitnessDay[]): HeatDay[] {
+  if (days.length === 0) return []
+  const map = new Map(days.map((d) => [d.date, d]))
+  const out: HeatDay[] = []
+  const [y, m, dd] = days[0].date.split('-').map(Number)
+  const today = fmtDate(new Date())
+  for (let d = new Date(y, m - 1, dd); fmtDate(d) <= today; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+    const key = fmtDate(d)
+    const day = map.get(key)
+    if (!day) {
+      out.push({ date: key, total: 0, tooltip: `${key} · 운동 없음` })
+      continue
+    }
+    const parts = [key]
+    if (day.count > 0) {
+      const types = day.types
+        .split(',')
+        .filter(Boolean)
+        .map((t) => WORKOUT_TYPES[t] ?? t)
+      parts.push(`${day.minutes}분`, `${day.count}회${types.length ? ` (${types.join('·')})` : ''}`)
+    }
+    if (day.lift) parts.push('웨이트')
+    out.push({
+      date: key,
+      total: day.minutes > 0 ? day.minutes : day.lift ? LIFT_ONLY_MINUTES : 0,
+      tooltip: parts.join(' · '),
+    })
   }
   return out
 }

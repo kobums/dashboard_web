@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '../lib/api'
-import type { LiftOverview } from '../types'
-import { kg, shortDate, timeAgo } from '../lib/lift'
+import type { LiftDailyRow, LiftOverview } from '../types'
+import { buildLiftHeatDays, kg, shortDate, timeAgo } from '../lib/lift'
+import Heatmap from '../components/common/Heatmap'
 import Modal from '../components/common/Modal'
 import { SkBlock, SkLines } from '../components/common/Skeleton'
 import ExerciseGrowth from '../components/lift/ExerciseGrowth'
@@ -13,10 +14,11 @@ import LogSheet from '../components/lift/LogSheet'
 
 // 웨이트 — 노션 「운동 캘린더」「운동 일지」를 서버가 동기화한 복제본(/api/lift/*)을 보여준다.
 // 「오늘 기록」 시트로 대시보드에서 노션에 직접 기록할 수도 있다(/api/lift/form·log).
-// 섹션: 동기화 상태 · 종목별 성장 · 최근 PR · 부위별 주간 볼륨 · 캘린더 · 체중 vs 근력.
+// 섹션: 동기화 상태 · 종목별 성장 · 최근 PR · 부위별 주간 볼륨 · 캘린더 · 웨이트 잔디 · 체중 vs 근력.
 
 export default function Lift() {
   const [data, setData] = useState<LiftOverview | null>(null)
+  const [daily, setDaily] = useState<LiftDailyRow[]>([])
   const [failed, setFailed] = useState(false)
   const [syncing, setSyncing] = useState(false)
   const [syncMessage, setSyncMessage] = useState('')
@@ -34,6 +36,10 @@ export default function Lift() {
         } else setFailed(true)
       })
       .catch(() => setFailed(true))
+    api
+      .get('/lift/daily')
+      .then((res) => setDaily(res.data.items ?? []))
+      .catch(() => {})
   }, [])
 
   useEffect(load, [load])
@@ -53,6 +59,8 @@ export default function Lift() {
   }
 
   const sync = data?.sync
+  const heatDays = useMemo(() => buildLiftHeatDays(daily), [daily])
+  const totalSets = daily.reduce((s, d) => s + d.sets, 0)
 
   return (
     <div className="stack desktop-grid">
@@ -176,6 +184,17 @@ export default function Lift() {
 
           <WeeklyVolume className="dg-6" weekly={data.weekly} />
           <LiftCalendar key={version} className="dg-6" />
+          {heatDays.length > 0 && (
+            <section className="card">
+              <div className="card-head">
+                <h2 className="card-title">웨이트 잔디</h2>
+                <span className="text-secondary" style={{ fontSize: 14 }}>
+                  {daily.length}일 · {totalSets.toLocaleString()}세트
+                </span>
+              </div>
+              <Heatmap days={heatDays} thresholds={[8, 16, 24]} />
+            </section>
+          )}
           <WeightVsStrength bodyweight={data.bodyweight} exercises={data.exercises} />
         </>
       )}
