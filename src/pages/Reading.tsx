@@ -34,6 +34,10 @@ export default function Reading() {
   const heatDays = useMemo(() => buildReadingHeatDays(daily), [daily])
   const dailyData = useMemo(() => buildReadingDaily(daily, 14), [daily])
   const weeklyData = useMemo(() => buildReadingWeekly(daily, thisWeekStart(new Date())), [daily])
+  const readDays = daily.filter((d) => d.pages > 0 || d.minutes > 0).length
+  const totalPages = daily.reduce((s, d) => s + d.pages, 0)
+  const totalSessions = daily.reduce((s, d) => s + d.sessions, 0)
+  const totalMinutes = daily.reduce((s, d) => s + d.minutes, 0)
 
   if (error) {
     return (
@@ -84,21 +88,21 @@ export default function Reading() {
         </div>
       </section>
 
-      {/* 같은 요일 비교 — 세션 기록이 쌓이면 채워진다 */}
+      {/* 같은 요일 비교 — 페이지는 읽은 페이지 로그, 시간은 세션(타이머) 기준 */}
       <CompareCard
         className="dg-8"
         metrics={['readingMinutes', 'readingPages']}
-        emptyHint="독서 세션(타이머)을 기록하면 시간·페이지 비교가 여기에 표시됩니다."
+        emptyHint="snippet 에서 읽은 페이지를 기록하면 페이지 비교가 여기에 표시됩니다. 시간 비교는 독서 세션(타이머) 기준입니다."
       />
 
-      {/* 일별/주별 독서 시간 */}
+      {/* 일별/주별 읽은 페이지 — 타이머 세션 + 진행률만 올린 날(snippet 읽은 페이지 로그) */}
       <section className="card dg-6">
-        <h2 className="card-title">일별 독서 시간</h2>
-        <WeeklyChart data={dailyData} />
+        <h2 className="card-title">일별 읽은 페이지</h2>
+        <WeeklyChart data={dailyData} dataKey="페이지" unit="p" label="읽은 페이지" />
       </section>
       <section className="card dg-6">
-        <h2 className="card-title">주별 독서 시간</h2>
-        <WeeklyChart data={weeklyData} />
+        <h2 className="card-title">주별 읽은 페이지</h2>
+        <WeeklyChart data={weeklyData} dataKey="페이지" unit="p" label="읽은 페이지" />
       </section>
 
       {/* 독서 잔디 */}
@@ -107,10 +111,11 @@ export default function Reading() {
           <div className="card-head">
             <h2 className="card-title">독서 잔디</h2>
             <span className="text-secondary" style={{ fontSize: 14 }}>
-              세션 {daily.reduce((s, d) => s + d.sessions, 0)}회 · {daily.reduce((s, d) => s + d.minutes, 0)}분
+              {readDays}일 · {totalPages.toLocaleString()}p
+              {totalSessions > 0 && ` · 세션 ${totalSessions}회 · ${totalMinutes}분`}
             </span>
           </div>
-          <Heatmap days={heatDays} thresholds={[15, 30, 60]} />
+          <Heatmap days={heatDays} thresholds={[10, 30, 60]} />
         </section>
       )}
 
