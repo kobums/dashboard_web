@@ -1,4 +1,5 @@
-import type { LiftSet, LiftWeek } from '../types'
+import type { HeatDay } from '../components/common/Heatmap'
+import type { LiftDailyRow, LiftSet, LiftWeek } from '../types'
 
 // 웨이트(노션 운동 기록) 공용 헬퍼 — /api/lift/* 응답 표시용.
 
@@ -137,4 +138,27 @@ export function cardioText(v: { minutes: number; speed: number; incline: number;
   if (v.incline) parts.push(`경사 ${v.incline}`)
   if (v.distance) parts.push(`${v.distance}km`)
   return parts.join(' · ')
+}
+
+// 첫 기록일 ~ 오늘을 하루 단위로 채운 웨이트 잔디 (농도 = 본세트 수).
+// 세트가 없는 날(유산소만·캘린더만)도 운동한 날이라 가장 옅은 칸으로 보인다.
+export function buildLiftHeatDays(days: LiftDailyRow[]): HeatDay[] {
+  if (days.length === 0) return []
+  const map = new Map(days.map((d) => [d.date, d]))
+  const out: HeatDay[] = []
+  const today = localISO(new Date())
+  for (let key = days[0].date; key <= today; key = shiftDay(key, 1)) {
+    const day = map.get(key)
+    if (!day) {
+      out.push({ date: key, total: 0, tooltip: `${key} · 쉼` })
+      continue
+    }
+    const parts = [key]
+    if (day.parts.length) parts.push(day.parts.join('·'))
+    if (day.sets > 0) parts.push(`${day.sets}세트`)
+    if (day.volume > 0) parts.push(`${Math.round(day.volume).toLocaleString()}kg`)
+    if (day.sets === 0 && day.exercises > 0) parts.push(`${day.exercises}종목`)
+    out.push({ date: key, total: Math.max(day.sets, 1), tooltip: parts.join(' · ') })
+  }
+  return out
 }

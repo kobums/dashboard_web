@@ -1,4 +1,5 @@
 import type { DevActivity } from '../../types'
+import { fmtDate } from '../../lib/fitness'
 
 // 최근 개발 활동 목록 — 개발 페이지와 홈(데스크톱) 공용.
 
@@ -18,7 +19,7 @@ function relativeDate(iso: string): string {
   if (days <= 0) return '오늘'
   if (days === 1) return '어제'
   if (days < 7) return `${days}일 전`
-  return d.toISOString().slice(0, 10)
+  return fmtDate(d)
 }
 
 export default function RecentActivityList({

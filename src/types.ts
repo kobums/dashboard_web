@@ -168,6 +168,25 @@ export interface DoneBook {
   endDate: string
 }
 
+// 운동·웨이트 잔디 (/api/fitness/daily, /api/lift/daily)
+
+export interface FitnessDay {
+  date: string
+  minutes: number
+  count: number
+  calories: number
+  types: string // 콤마 구분 workout 타입
+  lift: boolean // 노션 웨이트 기록일
+}
+
+export interface LiftDailyRow {
+  date: string
+  sets: number // 본세트 (웜업 제외)
+  volume: number // 중량 본세트 kg×회 (맨몸 제외)
+  exercises: number
+  parts: string[]
+}
+
 export interface MonthlyFitness {
   month: number
   sessions: number
