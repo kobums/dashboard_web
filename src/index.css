@@ -2470,6 +2470,25 @@ a.card:active {
   flex-direction: column;
 }
 
+.diet-unassigned {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--parchment);
+}
+
+.diet-unassigned-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.diet-unassigned .diet-item-sub {
+  margin: 4px 0 0;
+}
+
 .diet-meal {
   padding: 12px 0;
   border-bottom: 1px solid var(--divider-soft);

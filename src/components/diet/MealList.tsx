@@ -10,6 +10,16 @@ import Icon from '../common/Icon'
 
 // 음식 행은 노션 「식단 기록」 표 행이라 수정·삭제 가능. 「합계 보정」·끼니 메모 폴백 행(id 「페이지id#순번」)만 읽기 전용
 const isNotionDayItem = (it: DietItem) => it.id.includes('#')
+// 「합계 보정」 — 하루 합계에서 끼니별로 적힌 음식을 뺀 나머지 (끼니를 알 수 없어 간식 칸에 들어 있다)
+const isAdjustItem = (it: DietItem) => isNotionDayItem(it) && it.food === '합계 보정'
+// 노션 끼니 칸에만 적고 칼로리를 안 적은 끼니 — 0kcal 가 아니라 「모름」
+const isUncounted = (it: DietItem) =>
+  isNotionDayItem(it) && !isAdjustItem(it) && it.kcal === 0 && it.protein === 0 && it.carbs === 0 && it.fat === 0
+const sumMacros = (items: DietItem[]) =>
+  items.reduce(
+    (t, it) => ({ kcal: t.kcal + it.kcal, protein: t.protein + it.protein, carbs: t.carbs + it.carbs, fat: t.fat + it.fat }),
+    { kcal: 0, protein: 0, carbs: 0, fat: 0 },
+  )
 
 export default function MealList({
   day,
@@ -60,24 +70,48 @@ export default function MealList({
     }
   }
 
+  // 보정 행은 간식이 아니라 끼니 목록 위에 따로 — 끼니 칸에만 적은 날엔 하루 합계 대부분이 여기 있다
+  const adjust = day.meals.flatMap((m) => m.items.filter(isAdjustItem))
+  const adjustTotal = sumMacros(adjust)
+  const hasUncounted = day.meals.some((m) => m.items.some(isUncounted))
+  const meals = day.meals.map((m) => {
+    const items = m.items.filter((it) => !isAdjustItem(it))
+    return { meal: m.meal, items, totals: sumMacros(items), uncounted: items.length > 0 && items.every(isUncounted) }
+  })
+
   return (
     <section className={`card ${className}`}>
       <div className="card-head">
         <h2 className="card-title">끼니별 기록</h2>
         <span className="text-secondary" style={{ fontSize: 14 }}>
-          {day.meals.reduce((n, m) => n + m.items.length, 0)}개 · {kcalText(day.totals.kcal)}
+          {meals.reduce((n, m) => n + m.items.length, 0)}개 · {kcalText(day.totals.kcal)}
         </span>
       </div>
       {message && <p className="log-notice">{message}</p>}
 
+      {adjust.length > 0 && (
+        <div className="diet-unassigned">
+          <div className="diet-unassigned-head">
+            <span>{hasUncounted && adjustTotal.kcal > 0 ? '끼니 구분 없는 칼로리' : '합계 보정'}</span>
+            <span>{kcalText(adjustTotal.kcal)}</span>
+          </div>
+          <p className="diet-item-sub">
+            {pfc(adjustTotal)} ·{' '}
+            {hasUncounted && adjustTotal.kcal > 0
+              ? '노션에 끼니별 칼로리 없이 하루 합계만 있어 끼니로 나누지 못한 몫'
+              : '노션 하루 합계와 끼니별 기록의 차이'}
+          </p>
+        </div>
+      )}
+
       <div className="diet-meals">
-        {day.meals.map((m) => (
+        {meals.map((m) => (
           <div key={m.meal} className="diet-meal">
             <div className="diet-meal-head">
               <span className="diet-meal-name">{m.meal}</span>
               {m.items.length > 0 && (
                 <span className="diet-meal-total">
-                  {kcalText(m.totals.kcal)} · 단 {fmtNum(m.totals.protein)}g
+                  {m.uncounted ? '칼로리 미기록' : `${kcalText(m.totals.kcal)} · 단 ${fmtNum(m.totals.protein)}g`}
                 </span>
               )}
               <button className="diet-add-btn" onClick={() => onAdd(m.meal)} aria-label={`${m.meal} 추가`}>
@@ -114,14 +148,14 @@ export default function MealList({
                         className="diet-item-main"
                         onClick={() => onEdit(m.meal, it)}
                         disabled={isNotionDayItem(it)}
-                        title={isNotionDayItem(it) ? '노션 하루 합계와 맞추는 보정 항목 — 노션 「식단 기록」에서 수정' : undefined}
+                        title={isNotionDayItem(it) ? '노션 「식단 기록」 끼니 칸에서 온 항목 — 노션에서 수정' : undefined}
                       >
                         <span className="diet-item-name">
                           {it.food}
                           {it.grams > 0 && <span className="diet-item-grams"> {fmtNum(it.grams)}g</span>}
                         </span>
                         <span className="diet-item-sub">
-                          {kcalText(it.kcal)} · {pfc(it)}
+                          {isUncounted(it) ? '칼로리 미기록 — 노션 끼니 칸에 음식만 적힘' : `${kcalText(it.kcal)} · ${pfc(it)}`}
                         </span>
                       </button>
                       {!isNotionDayItem(it) && (
