@@ -490,3 +490,32 @@ export interface DietSearchItem {
   per: Macros
   servingGrams: number
 }
+
+export interface SignupWeek {
+  start: string
+  count: number
+}
+
+export interface SignupCounts {
+  today: number
+  yesterday: number
+  thisWeek: number
+  lastWeekSoFar: number
+  lastWeek: number
+  total: number
+}
+
+export interface SignupService extends SignupCounts {
+  key: string
+  name: string
+  lastSignup: string
+  weekly: SignupWeek[]
+  error?: string
+}
+
+export interface SignupSummary {
+  asOf: string
+  weekStart: string
+  totals: SignupCounts
+  services: SignupService[]
+}

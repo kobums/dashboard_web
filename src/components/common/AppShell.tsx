@@ -10,6 +10,7 @@ const tabs = [
   { to: '/lift', label: '웨이트' },
   { to: '/diet', label: '식단' },
   { to: '/dev', label: '개발' },
+  { to: '/services', label: '서비스' },
 ]
 
 export default function AppShell() {
