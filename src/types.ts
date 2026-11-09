@@ -505,17 +505,30 @@ export interface SignupCounts {
   total: number
 }
 
+export interface ServiceActivity {
+  today: number
+  thisWeek: number
+  lastWeekSoFar: number
+  lastWeek: number
+  last30: number
+  lastActive: string
+  weekly: SignupWeek[]
+  error?: string
+}
+
 export interface SignupService extends SignupCounts {
   key: string
   name: string
   lastSignup: string
   weekly: SignupWeek[]
   error?: string
+  activity: ServiceActivity | null
 }
 
 export interface SignupSummary {
   asOf: string
   weekStart: string
   totals: SignupCounts
+  activityTotals: Omit<ServiceActivity, 'lastActive' | 'weekly' | 'error'>
   services: SignupService[]
 }

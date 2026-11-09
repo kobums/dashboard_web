@@ -2890,9 +2890,16 @@ a.card:active {
   height: 24px;
 }
 
+.signup-row.wide {
+  grid-template-columns: minmax(0, 1fr) repeat(4, 56px) 72px;
+}
+
 @media (max-width: 520px) {
   .signup-row {
     grid-template-columns: minmax(0, 1fr) repeat(3, 44px);
+  }
+  .signup-row.wide {
+    grid-template-columns: minmax(0, 1fr) repeat(4, 40px);
   }
   .signup-spark,
   .signup-spark-head {
