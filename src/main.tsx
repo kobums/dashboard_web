@@ -12,6 +12,7 @@ import Dev from './pages/Dev'
 import Lift from './pages/Lift'
 import Diet from './pages/Diet'
 import Services from './pages/Services'
+import ServiceDetail from './pages/ServiceDetail'
 
 function RequireAuth() {
   if (!getToken()) {
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/diet" element={<Diet />} />
             <Route path="/dev" element={<Dev />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:key" element={<ServiceDetail />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

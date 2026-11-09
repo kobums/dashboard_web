@@ -2906,3 +2906,153 @@ a.card:active {
     display: none;
   }
 }
+
+/* 서비스 행 → 상세 링크 */
+a.signup-row.link {
+  transition: background-color 0.2s;
+  border-radius: var(--r-sm);
+}
+
+a.signup-row.link:hover {
+  background: var(--pearl);
+}
+
+a.signup-row.link:active {
+  transform: scale(0.99);
+}
+
+/* ---- 서비스 상세 ---- */
+
+.back-link {
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.224px;
+  color: var(--ink-48);
+  vertical-align: middle;
+}
+
+.status-pill::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--track);
+}
+
+.status-pill.active {
+  color: var(--ink);
+}
+
+.status-pill.active::before {
+  background: var(--accent);
+}
+
+.split-bar {
+  display: flex;
+  height: 8px;
+  margin-top: 16px;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  background: var(--track);
+}
+
+.split-bar > span {
+  background: var(--accent);
+}
+
+.source-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 64px 64px;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--hairline);
+  font-variant-numeric: tabular-nums;
+}
+
+.source-row.head {
+  border-top: 0;
+  padding-bottom: 4px;
+  font-size: 12px;
+  color: var(--ink-48);
+}
+
+.source-row .num {
+  text-align: right;
+}
+
+.cohort-wrap {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.cohort-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cohort-table th {
+  font-weight: 400;
+  color: var(--ink-48);
+  text-align: center;
+  white-space: nowrap;
+  padding: 2px 4px;
+}
+
+.cohort-table th:first-child,
+.cohort-table td:first-child {
+  text-align: left;
+}
+
+.cohort-table td {
+  min-width: 40px;
+  height: 30px;
+  text-align: center;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.cohort-table td.size {
+  color: var(--ink-48);
+  min-width: 32px;
+}
+
+.cohort-cell {
+  position: relative;
+  color: var(--ink);
+}
+
+.cohort-cell > i {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: var(--accent);
+}
+
+.cohort-cell > b {
+  position: relative;
+  font-weight: 400;
+}
+
+.cohort-cell.strong > b {
+  color: #fff;
+  font-weight: 600;
+}
+
+.cohort-cell.partial {
+  outline: 1px dashed var(--hairline);
+}

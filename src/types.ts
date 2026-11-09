@@ -532,3 +532,31 @@ export interface SignupSummary {
   activityTotals: Omit<ServiceActivity, 'lastActive' | 'weekly' | 'error'>
   services: SignupService[]
 }
+
+export interface ServiceDetail {
+  key: string
+  name: string
+  days: number
+  asOf: string
+  weekStart: string
+  status: 'active' | 'stale' | 'dormant' | 'none'
+  total: number
+  lastSignup: string
+  signupsToday: number
+  signupsThisWeek: number
+  signupsWindow: number
+  daily: { date: string; signups: number; active: number }[]
+  weekly: { start: string; signups: number; active: number }[]
+  activity: {
+    today: number
+    thisWeek: number
+    window: number
+    last30: number
+    newThisWeek: number
+    returningThisWeek: number
+    lastActive: string
+    sources: { label: string; events: number; users: number }[]
+    cohorts: { start: string; size: number; active: (number | null)[] }[]
+    cohortsReady: boolean
+  } | null
+}

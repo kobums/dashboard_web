@@ -1,95 +1,17 @@
 import { useEffect, useState } from 'react'
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
+import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import type { SignupService, SignupSummary, SignupWeek } from '../types'
+import { BarCard, Delta, Spark, daysAgoText, shortDate } from '../components/services/parts'
 
 // 서비스별 신규 가입·활성 유저 — 공용 MariaDB 의 각 서비스 테이블 집계 (/api/signups/summary, 5분 캐시).
 // 활성 유저 = 기간 안에 활동 흔적(로그인 토큰·콘텐츠 생성/수정)이 있는 고유 유저. 주는 월요일 시작.
-// 증감은 ▲▼ + 중립 잉크 (DESIGN: 두 번째 액센트 금지).
-
-function Delta({ now, before }: { now: number; before: number }) {
-  const diff = now - before
-  if (diff === 0) return <span className="compare-delta">지난주 같은 시점과 동일</span>
-  return (
-    <span className="compare-delta">
-      지난주 같은 시점 대비 {diff > 0 ? '▲' : '▼'} {Math.abs(diff)}
-    </span>
-  )
-}
-
-function Spark({ weekly }: { weekly: SignupWeek[] }) {
-  const max = Math.max(1, ...weekly.map((w) => w.count))
-  const bw = 72 / weekly.length
-  return (
-    <svg className="signup-spark" viewBox="0 0 72 24" aria-hidden="true">
-      {weekly.map((w, i) => {
-        const h = w.count === 0 ? 1 : Math.max(2, (w.count / max) * 24)
-        return (
-          <rect
-            key={w.start}
-            x={i * bw + 1}
-            y={24 - h}
-            width={bw - 2}
-            height={h}
-            rx={1}
-            fill={w.count === 0 ? 'var(--track)' : 'var(--accent)'}
-          />
-        )
-      })}
-    </svg>
-  )
-}
-
-function WeeklyChart({ data, title, sub, label }: { data: { name: string; 명: number }[]; title: string; sub: string; label: string }) {
-  return (
-    <section className="card dg-4">
-      <h2 className="card-title">{title}</h2>
-      <p className="text-secondary" style={{ fontSize: 14, marginTop: 4 }}>
-        {sub}
-      </p>
-      <div className="chart-box">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 0, left: -28, bottom: 0 }}>
-            <CartesianGrid vertical={false} stroke="var(--track)" />
-            <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-48)', fontSize: 12 }} />
-            <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: 'var(--ink-48)', fontSize: 12 }} />
-            <Tooltip
-              cursor={{ fill: 'var(--cursor-fill)' }}
-              contentStyle={{ borderRadius: 11, border: '1px solid var(--tooltip-border)', background: 'var(--tooltip-bg)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13 }}
-              formatter={(value) => [`${value ?? 0}명`, label]}
-              labelFormatter={(l) => `${l} 주`}
-            />
-            <Bar dataKey="명" fill="var(--accent)" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </section>
-  )
-}
-
-function daysAgoText(prefix: string, ts: string, empty: string): string {
-  if (!ts) return empty
-  const days = Math.floor((Date.now() - new Date(ts.replace(' ', 'T')).getTime()) / 86400000)
-  if (days <= 0) return `${prefix} 오늘`
-  return `${prefix} ${days}일 전`
-}
-
-function weekLabel(start: string) {
-  return `${Number(start.slice(5, 7))}/${Number(start.slice(8, 10))}`
-}
+// 행을 누르면 /services/:key 상세.
 
 function sumWeekly(services: SignupService[], pick: (s: SignupService) => SignupWeek[] | undefined) {
   const weeks = services[0]?.weekly ?? []
   return weeks.map((w, i) => ({
-    name: weekLabel(w.start),
+    name: shortDate(w.start),
     명: services.reduce((sum, s) => sum + (pick(s)?.[i]?.count ?? 0), 0),
   }))
 }
@@ -199,7 +121,7 @@ export default function Services() {
             const a = s.activity
             if (!a || a.error) {
               return (
-                <div className="signup-row wide" key={s.key}>
+                <Link to={`/services/${s.key}`} className="signup-row wide link" key={s.key}>
                   <span className="signup-name">
                     {s.name}
                     <span className="signup-sub">{a?.error ?? '활동 기록 없음'}</span>
@@ -209,12 +131,12 @@ export default function Services() {
                   <span className="num text-tertiary">–</span>
                   <span className="num text-tertiary">–</span>
                   <span className="signup-spark" />
-                </div>
+                </Link>
               )
             }
             const rate = s.total > 0 ? Math.round((a.last30 / s.total) * 100) : 0
             return (
-              <div className="signup-row wide" key={s.key}>
+              <Link to={`/services/${s.key}`} className="signup-row wide link" key={s.key}>
                 <span className="signup-name">
                   {s.name}
                   <span className="signup-sub">{daysAgoText('마지막 활동', a.lastActive, '활동 없음')}</span>
@@ -224,7 +146,7 @@ export default function Services() {
                 <span className="num">{a.last30}</span>
                 <span className="num">{rate}%</span>
                 <Spark weekly={a.weekly} />
-              </div>
+              </Link>
             )
           })}
         </div>
@@ -233,11 +155,12 @@ export default function Services() {
         </p>
       </section>
 
-      <WeeklyChart
+      <BarCard
         data={sumWeekly(data.services, (s) => s.activity?.weekly)}
         title="주별 활성 유저"
         sub={`서비스별 합계 · 최근 ${weekCount}주`}
         label="활성 유저"
+        tooltipLabel={(l) => `${l} 주`}
       />
 
       <section className="card dg-8">
@@ -251,7 +174,7 @@ export default function Services() {
             <span className="num signup-spark-head">8주</span>
           </div>
           {bySignup.map((s) => (
-            <div className="signup-row" key={s.key}>
+            <Link to={`/services/${s.key}`} className="signup-row link" key={s.key}>
               <span className="signup-name">
                 {s.name}
                 <span className="signup-sub">
@@ -262,16 +185,17 @@ export default function Services() {
               <span className={`num${s.thisWeek > 0 ? ' hot' : ''}`}>{s.thisWeek}</span>
               <span className="num">{s.total.toLocaleString()}</span>
               <Spark weekly={s.weekly} />
-            </div>
+            </Link>
           ))}
         </div>
       </section>
 
-      <WeeklyChart
+      <BarCard
         data={sumWeekly(data.services, (s) => s.weekly)}
         title="주별 가입"
         sub={`전체 서비스 합계 · 최근 ${weekCount}주`}
         label="신규 가입"
+        tooltipLabel={(l) => `${l} 주`}
       />
     </div>
   )
